@@ -107,28 +107,40 @@ const Modular = {
                 let tag = parts[0];
                 let props = (parts.length > 1 ? Modular.core.getProps(parts.slice(1)) : {});
                 let rendered;
+                if (!/\w/g.test(tag)) return false;
+                let tagValue = window[tag];
 
-                if (!window.hasOwnProperty(tag)) return false;
+                // fallback for let and const variables (sadly no other way)
+                if (!tagValue) {
+                    try {
+                        tagValue = eval(tag);
+                    } catch (e) {
+                        return false;
+                    }
+                }
 
-                if (Modular.core.isElement(window[tag])) {
-                    rendered = Modular.core.toHtml(window[tag]);
+                // if (typeof window[tag] == "undefined") return false;
 
-                } else if (window[tag].constructor === Function) {
-                    window[tag].props = props;
-                    rendered = window[tag](props);
+                if (Modular.core.isElement(tagValue)) {
+                    rendered = Modular.core.toHtml(tagValue);
+
+                } else if (tagValue.constructor === Function) {
+                    tagValue.props = props;
+                    rendered = tagValue(props);
 
                     // !!
-                    if (rendered.constructor === Array && rendered[0].startsWith("<") && rendered[rendered.length - 1].endsWith(">")) {
+                    // && rendered.join().startsWith("<") && rendered.join().endsWith(">")
+                    if (rendered.constructor === Array) {
                         rendered = rendered.join("");
                     };
 
-                    if (!(rendered.constructor === String || rendered.constructor === Number || Modular.core.isElement(rendered))) throw Modular.core.err(
+                    if (!(rendered.constructor === String || rendered.constructor === Number)) throw Modular.core.err(
                         11, "A Component -function must return a value of type [String], [Number] or [HTML-element]!",
                         "Arrays containing elements will be joined.",
                         "Modular.core.renderContext");
 
-                } else if (window[tag].constructor === String || window[tag].constructor === Number) {
-                    rendered = window[tag];
+                } else if (tagValue.constructor === String || tagValue.constructor === Number) {
+                    rendered = tagValue;
 
                 } else throw Modular.core.err(
                     12, "Inserted elements must be of type [Function], [String], [Number] or [HTML-element]!",

@@ -1,16 +1,21 @@
 let names = ["Felix", "Tobias", "Lukas", "Simon", "Samuel", "Julian", "Mischa"];
 var js_variable = "#cdc";
 
+let obj = {
+    el1: <h1>Test</h1>
+};
+
 function welcome(props) {
     let nameElement = props.names.map(name => {
-        let myEl = <h2 onClick="console.log('Test');">Hey, ${name}</h2>;
-        return myEl;
+        return <h2 onClick="console.log('Test');">Hey, ${name}</h2>
     });
 
     return nameElement;
 }
 
 Modular.render({
-    elements: [<welcome names={names} />],
+    elements: [
+        "<welcome names={names} />",
+    ],
     container: document.querySelector("#root")
 });

@@ -17,7 +17,6 @@ const Cssx = {
                 let temp = insertFunc(key);
                 if (temp) result += insertFunc(key) + rest;
                 else result += `${d1}${key}${d2}${rest}`;
-
             }
 
             return result;
@@ -70,7 +69,7 @@ const Cssx = {
 
         parse(style) {
             let parsed = Cssx.core.insert("js(", ")", style, key => eval(key));
-            parsed = `\n\n ${parsed}`;
+            parsed = `\n${parsed}\n`;
 
             return parsed;
         },
@@ -82,10 +81,10 @@ const Cssx = {
 
         fileWatcher() {
             if (!DirectJs.data.allScriptsLoaded) window.requestAnimationFrame(Cssx.core.fileWatcher);
+            else Cssx.core.init();
         }
     }
 }
 
-if (window.hasOwnProperty("DirectJs")) {
-    if (DirectJs.data.expectedScripts > 0) Cssx.core.fileWatcher();
-} else Cssx.core.init();
+if (typeof DirectJs == "object") Cssx.core.fileWatcher();
+else Cssx.core.init();

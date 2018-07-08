@@ -4,6 +4,9 @@ const DirectJs = {
     data: {
         initElement: undefined,
         insertElement: undefined,
+        loadedScripts: undefined,
+        expectedScripts: undefined,
+        allScriptsLoaded: undefined,
     },
 
     core: {
@@ -23,11 +26,13 @@ const DirectJs = {
         },
 
         loadData(path, callback) {
+            DirectJs.data.expectedScripts++;
             var xhttp = new XMLHttpRequest();
 
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     callback(this.responseText);
+                    DirectJs.data.loadedScripts++;
                 }
             };
 
@@ -42,6 +47,9 @@ const DirectJs = {
         },
 
         init() {
+            DirectJs.data.loadedScripts = 0;
+            DirectJs.data.expectedScripts = 0;
+            DirectJs.data.allScriptsLoaded = false;
             DirectJs.data.initElement = document.currentScript;
             let scriptElements = Array.from(document.getElementsByTagName("script"));
             DirectJs.data.insertElement = document.createElement("script");
@@ -50,22 +58,46 @@ const DirectJs = {
             scriptElements.map(tag => {
                 if (tag == DirectJs.data.initElement || tag.getAttribute("type") != "direct-js") return;
                 let src = tag.getAttribute("src");
-                if (src) DirectJs.core.loadData(src, code => DirectJs.core.addScript(DirectJs.core.parse(code)));
-                else if (tag.innerText) DirectJs.core.addScript(DirectJs.core.parse(tag.innerText));
+                if (src) DirectJs.core.loadData(src, code => DirectJs.core.addScript(DirectJs.core.compile(code)));
+                else if (tag.innerText) DirectJs.core.addScript(DirectJs.core.compile(tag.innerText));
                 else console.warn(`(Parser): Found a "useless" <script type="direct-js">-tag!`);
                 tag.remove();
             });
+
+            DirectJs.core.fileWatcher();
         },
 
-        parse(code) {
+        compile(code) {
             let parsed = code;
 
-            parsed = parsed.replace(/"(<\w.*>\n*.*\n*<\/\s*\w.*>|<\w.*\w*\/>)"/gim, `$1`);
-            parsed = parsed.replace(/'(<\w.*>\n*.*\n*<\/\s*\w.*>|<\w.*\w*\/>)'/gim, `$1`);
-            parsed = parsed.replace(/`(<\w.*>\n*.*\n*<\/\s*\w.*>|<\w.*\w*\/>)`/gim, `$1`);
-            parsed = parsed.replace(/(<\w.*>\n*.*\n*<\/\s*\w.*>|<\w.*\w*\/>)/gim, `\`$1\``);
+            // Multi-line
+            parsed = parsed.replace(/=\s*<div( +.*)*>/gim, match => `=\`${match.slice(1)}`);
+            parsed = parsed.replace(/\(\s*<div( +.*)*>/gim, match => `(\`${match.slice(1)}`);
+            parsed = parsed.replace(/return\s*<div( +.*)*>/gim, match => `return\`${match.slice(6)}`);
+            parsed = parsed.replace(/=>\s*<div( +.*)*>/gim, match => `=>\`${match.slice(2)}`);
+
+            parsed = parsed.replace(/<\/div\s*>\s*;/gim, match => `${match.slice(0, -1)}\`;`);
+            parsed = parsed.replace(/<\/div\s*>\s*\)/gim, match => `${match.slice(0, -1)}\`)`);
+            parsed = parsed.replace(/<\/div\s*>\s*return/gim, match => `${match.slice(0, -6).trim()}\`\nreturn`);
+            parsed = parsed.replace(/<\/div\s*>\s*}/gim, match => `${match.slice(0, -1)}\`}`);
+
+            parsed = parsed.replace(/=\s*(<\w*( +.*)*>.*<\/\w*( +.*)*>|<\w*( +.*)*\/>)/gim, match => `=\`${match.slice(1)}\``);
+            parsed = parsed.replace(/=>\s*(<\w*( +.*)*>.*<\/\w*( +.*)*>|<\w*( +.*)*\/>)/gim, match => `=>\`${match.slice(2)}\``);
+            parsed = parsed.replace(/return\s*(<\w*( +.*)*>.*<\/\w*( +.*)*>|<\w*( +.*)*\/>)/gim, match => `return\`${match.slice(6)}\``);
+            parsed = parsed.replace(/:\s*(<\w*( +.*)*>.*<\/\w*( +.*)*>|<\w*( +.*)*\/>)/gim, match => `:\`${match.slice(1)}\``);
+            parsed = parsed.replace(/\(\s*(<\w*( +.*)*>.*<\/\w*( +.*)*>|<\w*( +.*)*\/>)/gim, match => `(\`${match.slice(1)}\``);
+
+            if (parsed.endsWith(">")) parsed += "\`";
+            parsed = `document.currentScript.remove();${parsed}`;
 
             return parsed;
+        },
+
+        fileWatcher() {
+            if (DirectJs.data.loadedScripts == DirectJs.data.expectedScripts || DirectJs.data.expectedScripts.length == 0) {
+                DirectJs.data.allScriptsLoaded = true;
+            }
+            else window.requestAnimationFrame(DirectJs.core.fileWatcher);
         }
     }
 }
