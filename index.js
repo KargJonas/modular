@@ -5,7 +5,7 @@ let obj = {
     el1: <h1>Test</h1>
 };
 
-function welcome(props) {
+let welcome = (props) => {
     let nameElement = props.names.map(name => {
         return <h2 onClick="console.log('Test');">Hey, ${name}</h2>
     });
@@ -15,7 +15,8 @@ function welcome(props) {
 
 Modular.render({
     elements: [
-        "<welcome names={names} />",
+        <welcome names={names} />,
+        <welcome names={names} />
     ],
     container: document.querySelector("#root")
 });
