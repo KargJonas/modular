@@ -9,7 +9,9 @@ const Modular = {
             10: "Invalid/Missing configuration",
             11: "Invalid insert",
             12: "Invalid component",
-            13: "Invalid instance"
+            13: "Invalid component-instance",
+            14: "Invalid element-content",
+            15: "Invalid passed-in value"
         }
     },
 
@@ -33,7 +35,7 @@ const Modular = {
                 return `\n--> ${arg}`;
             });
 
-            return new Error(`(Modular)${type}:${error}${position}\n`);
+            return new Error(`(Modular)${type}:${error}\n${position}\n`);
         },
 
         info() {
@@ -92,88 +94,90 @@ const Modular = {
             return value;
         },
 
-        renderContext(context) {
-            return context.replace(/<\w*[^<]*\/>/gim, key => {
-                key = key.slice(1, -2);
-                let parts = key.replace(/\s\s+/g, " ").trim().split(" ");
-                let tag = parts[0];
-                let props = (parts.length > 1 ? Modular.core.getProps(parts.slice(1)) : {});
-                let rendered;
-                let tagValue = Modular.core.getVariable(tag);
+        getValue(value) {
+            if (value.constructor === String || value.constructor === Number) return value;
+            if (value.constructor === Object) {
+                if (value.type === "modular-element") return Modular.core.renderElement(value);
+                else throw Modular.core.err(15, "core.getValue");
+            }
+            throw Modular.core.err(15, "Value must be of type String, Number or Object", "core.getValue");
+        },
 
-                // if (typeof window[tag] == "undefined") return false;
+        renderElement(context) {
+            if (!context.constructor === Object || context.type !== "modular-element") throw Modular.core.err(
+                10, "Invalid element.", "Must be of type Object.", "Create with Modular.el()", "core.renderElement");
 
-                if (Modular.core.isElement(tagValue)) {
-                    rendered = Modular.core.toHtml(tagValue);
+            let rendered;
+            let tagVal;
 
-                } else if (tagValue.constructor === Function) {
-                    tagValue.props = props;
-                    rendered = tagValue(props);
+            if (context.tag[0] == context.tag[0].toUpperCase()) {
+                tagVal = Modular.core.getVariable(context.tag);
+            }
 
-                    if (!rendered) throw Modular.core.err(
-                        11, "A Component -function must return a value!",
-                        "Modular.core.renderContext");
+            if (tagVal) {
+                if (tagVal.constructor === Function) {
+                    rendered = Modular.core.getValue(tagVal(context.attributes || {}));
+                    if (!rendered) throw Modular.core.err(12, "Component-functions must return a value.", "core.renderElement");
+                } else rendered = Modular.core.getValue(tagVal);
 
-                    // && rendered.join().startsWith("<") && rendered.join().endsWith(">")
-                    if (rendered.constructor === Array) {
-                        rendered = rendered.join("");
-                    };
+            } else {
+                if (context.innerHTML) {
+                    rendered = context.innerHTML.map(el => {
+                        return Modular.core.tag(context.tag, Modular.core.getValue(el), context.attributes);
+                    }).join("");
+                } else rendered = "";
+            }
 
-                    if (!(rendered.constructor === String || rendered.constructor === Number)) throw Modular.core.err(
-                        11, "A Component -function must return a value of type [String], [Number] or [HTML-element]!",
-                        "Arrays containing elements will be joined.",
-                        "Modular.core.renderContext");
+            return rendered;
+        },
 
-                } else if (tagValue.constructor === String || tagValue.constructor === Number) {
-                    rendered = tagValue;
-
-                } else throw Modular.core.err(
-                    12, "Inserted elements must be of type [Function], [String], [Number] or [HTML-element]!",
-                    `core.${arguments.callee.name}`);
-
-                rendered = rendered.toString().replace("~{", "__modular_curved_bracket_open__")
-                    .replace("~}", "__modular_curved_bracket_close__");
-
-                // rendered = rendered.replace(/{[^}]*}/g, key => eval(key.slice(1, -1)));
-
-                rendered = rendered.replace("__modular_curved_bracket_open__", "{")
-                    .replace("__modular_curved_bracket_close__", "}");
-
-                return Modular.core.renderContext(rendered);
-            });
+        tag(elementTag, elementInnerHTML, elementArguments) {
+            let elArgsConverted = "";
+            if (elementArguments) elArgsConverted = " " + Object.entries(elementArguments).map(entry => `${entry[0]}="${entry[1]}"`).join(" ");
+            element = `<${elementTag}${elArgsConverted}>${elementInnerHTML}</${elementTag}>`;
+    
+            return element;
         }
     },
 
-    render() {
-        let perv = performance.now();
+    el() {
+        let func_args = Array.from(arguments);
+        if (func_args <= 0) throw Modular.core.err(10, "Missing arguments.", "el");
+        if (func_args[0].constructor !== String) throw Modular.core.err(10, "Invalid tag-name", "el");
+        if (/[^\w]+/g.test(func_args[0])) throw Modular.core.err(10, "Invalid tag-name", "el");
 
-        let args = Array.from(arguments);
-        let elements;
-        let container;
+        let elementTag = func_args[0];
+        let elementAttributes;
+        let elementInnerHTML;
 
-        if (arguments.length === 0) throw Modular.core.err(
-            10, "Empty render.", "render");
+        func_args.shift();
+        func_args.map(arg => {
+            if (arg.constructor === Array) elementInnerHTML = arg;
+            else if (arg.constructor === String || arg.constructor === Number) elementInnerHTML = [arg];
+            else if (arg.constructor === Object) elementAttributes = arg;
+            else throw Modular.core.err(10, "Invalid argument.", `Type: ${typeof arg}`, `Value: ${arg}`, "el");
+        });
 
-        if (args.length === 1 && args[0].constructor === Object) {
-            let conf = arguments[0];
-            elements = conf.elements;
-            container = arguments[0].container;
+        return {
+            type: "modular-element",
+            tag: elementTag,
+            attributes: elementAttributes,
+            innerHTML: elementInnerHTML
+        };
+    },
 
-        } else {
-            container = arguments[arguments.length - 1];
-            args.pop();
-            elements = args;
-        }
-
-        if (!elements || !container) throw Modular.core.err(
-            10, "Missing elements or container.", "render");
+    render(element, container) {
+        if (!element || !container) throw Modular.core.err(
+            10, "Missing element or container.", "render");
 
         if (!Modular.core.isElement(container)) throw Modular.core.err(
             10, "Invalid container",
             "Container must be an HTML-element.",
             "render");
 
-        if (container.constructor === String) container = document.querySelector(container)
-        container.innerHTML = Modular.core.renderContext(elements.join(""));
+        if (!element.constructor === Object || element.type !== "modular-element") throw Modular.core.err(
+            10, "Invalid element.", "Must be of type Object.", "Create with Modular.el()", "render");
+
+        container.innerHTML = Modular.core.renderElement(element);
     }
 };

@@ -1,26 +1,19 @@
-function myComp(props) {
-    let elements = "";
+function MyComponent(props) {
+    let arr = [];
 
     for (let i = 0; i < props.amount; i++) {
-        elements += <h1 class="lol">${i+1}</h1>;
+        let element = Modular.el(
+            "h1",
+            `${props.greeting} ${i + 1}`,
+        );
+
+        arr.push(element);
     }
 
-    return elements;
+    return Modular.el("div", arr);
 }
 
-let myEl = <h1>Test</h1>;
-
-console.log(myEl);
-
-
-function render() {
-    Modular.render(
-        <myComp amount={100} />,
-        document.querySelector("#root"),
-    );
-}
-
-render();
-
-// window.addEventListener("click", render);
-// window.addEventListener("resize", render);
+Modular.render(
+    Modular.el("MyComponent", { amount: 50, greeting: "Hello" }),
+    document.querySelector("#root"),
+);
