@@ -1,26 +1,25 @@
+let p = performance.now()
+
 function myComp(props) {
     let elements = "";
 
     for (let i = 0; i < props.amount; i++) {
-        elements += <h1 class="lol">${i+1}</h1>;
+        elements += tag("div", true, i + 1);
     }
 
     return elements;
 }
 
-let myEl = <h1>Test</h1>;
-
-console.log(myEl);
-
-
 function render() {
     Modular.render(
-        <myComp amount={100} />,
+        tag("myComp", {amount: 100}, true),
         document.querySelector("#root"),
     );
 }
 
 render();
 
+console.log(performance.now() - p);
+
 // window.addEventListener("click", render);
-// window.addEventListener("resize", render);
+window.addEventListener("resize", render);

@@ -1,7 +1,5 @@
 /* Jonas Karg 2018 */
 
-// Regex to match html tags' start-tag: <\s*\w.*?>
-
 const Modular = {
     data: {
         wrapper: document.createElement("div"),
@@ -10,7 +8,7 @@ const Modular = {
             01: "Syntax Error",
             10: "Invalid/Missing configuration",
             11: "Invalid insert",
-            12: "Invalid conponent",
+            12: "Invalid component",
             13: "Invalid instance"
         }
     },
@@ -72,52 +70,36 @@ const Modular = {
             return obj;
         },
 
-        insert(d1, d2, context, insertFunc) {
-            let occurs, result;
-
-            occurs = context.split(d1);
-            result = occurs.shift();
-
-            if ((context.match(d2) || []).length <= 0) return context;
-
-            for (let part of occurs) {
-                let [key, rest, overflow] = part.split(d2);
-
-                if (!key || rest === undefined || overflow) {
-                    result += `${d1}${part}`;
-
-                } else {
-                    let temp = insertFunc(key);
-                    if (temp) result += insertFunc(key) + rest;
-                    else result += `${d1}${key}${d2}${rest}`;
-                }
-
-            } return result;
-        },
-
         toHtml(el) {
             Modular.data.wrapper.innerHTML = null;
             Modular.data.wrapper.appendChild(el);
             return Modular.data.wrapper.innerHTML;
         },
 
+        getVariable(name) {
+            if (!/[^0-9]\w*/.test(name)) return undefined;
+            let value = window[name];
+
+            // fallback for let and const variables (sadly no other way)
+            if (!value) {
+                try {
+                    value = eval(name);
+                } catch (e) {
+                    return undefined;
+                }
+            }
+
+            return value;
+        },
+
         renderContext(context) {
-            return Modular.core.insert("<", "/>", context, key => {
+            return context.replace(/<\w*[^<]*\/>/gim, key => {
+                key = key.slice(1, -2);
                 let parts = key.replace(/\s\s+/g, " ").trim().split(" ");
                 let tag = parts[0];
                 let props = (parts.length > 1 ? Modular.core.getProps(parts.slice(1)) : {});
                 let rendered;
-                if (!/\w/g.test(tag)) return false;
-                let tagValue = window[tag];
-
-                // fallback for let and const variables (sadly no other way)
-                if (!tagValue) {
-                    try {
-                        tagValue = eval(tag);
-                    } catch (e) {
-                        return false;
-                    }
-                }
+                let tagValue = Modular.core.getVariable(tag);
 
                 // if (typeof window[tag] == "undefined") return false;
 
@@ -128,7 +110,10 @@ const Modular = {
                     tagValue.props = props;
                     rendered = tagValue(props);
 
-                    // !!
+                    if (!rendered) throw Modular.core.err(
+                        11, "A Component -function must return a value!",
+                        "Modular.core.renderContext");
+
                     // && rendered.join().startsWith("<") && rendered.join().endsWith(">")
                     if (rendered.constructor === Array) {
                         rendered = rendered.join("");
@@ -149,7 +134,8 @@ const Modular = {
                 rendered = rendered.toString().replace("~{", "__modular_curved_bracket_open__")
                     .replace("~}", "__modular_curved_bracket_close__");
 
-                rendered = Modular.core.insert("{", "}", rendered, key => eval(key));
+                // rendered = rendered.replace(/{[^}]*}/g, key => eval(key.slice(1, -1)));
+
                 rendered = rendered.replace("__modular_curved_bracket_open__", "{")
                     .replace("__modular_curved_bracket_close__", "}");
 
@@ -159,6 +145,8 @@ const Modular = {
     },
 
     render() {
+        let perv = performance.now();
+
         let args = Array.from(arguments);
         let elements;
         let container;
@@ -180,7 +168,12 @@ const Modular = {
         if (!elements || !container) throw Modular.core.err(
             10, "Missing elements or container.", "render");
 
+        if (!Modular.core.isElement(container)) throw Modular.core.err(
+            10, "Invalid container",
+            "Container must be an HTML-element.",
+            "render");
+
         if (container.constructor === String) container = document.querySelector(container)
-        container.innerHTML += Modular.core.renderContext(elements.join(""));
+        container.innerHTML = Modular.core.renderContext(elements.join(""));
     }
 };
