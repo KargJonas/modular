@@ -135,34 +135,20 @@ const Modular = {
             let elArgsConverted = "";
             if (elementArguments) elArgsConverted = " " + Object.entries(elementArguments).map(entry => `${entry[0]}="${entry[1]}"`).join(" ");
             element = `<${elementTag}${elArgsConverted}>${elementInnerHTML}</${elementTag}>`;
-    
+
             return element;
         }
     },
 
-    el() {
-        let func_args = Array.from(arguments);
-        if (func_args <= 0) throw Modular.core.err(10, "Missing arguments.", "el");
-        if (func_args[0].constructor !== String) throw Modular.core.err(10, "Invalid tag-name", "el");
-        if (/[^\w]+/g.test(func_args[0])) throw Modular.core.err(10, "Invalid tag-name", "el");
-
-        let elementTag = func_args[0];
-        let elementAttributes;
-        let elementInnerHTML;
-
-        func_args.shift();
-        func_args.map(arg => {
-            if (arg.constructor === Array) elementInnerHTML = arg;
-            else if (arg.constructor === String || arg.constructor === Number) elementInnerHTML = [arg];
-            else if (arg.constructor === Object) elementAttributes = arg;
-            else throw Modular.core.err(10, "Invalid argument.", `Type: ${typeof arg}`, `Value: ${arg}`, "el");
-        });
+    el(tag, attributes, innerHTML) {
+        if (typeof tag !== "string") throw Modular.core.err(10, "Invalid or missing tag attibute.", "el");
+        if (innerHTML && innerHTML.constructor !== Array) innerHTML = [innerHTML];
 
         return {
             type: "modular-element",
-            tag: elementTag,
-            attributes: elementAttributes,
-            innerHTML: elementInnerHTML
+            tag: tag,
+            attributes: attributes || {},
+            innerHTML: innerHTML
         };
     },
 
