@@ -80,22 +80,42 @@ const DirectJs = {
             DirectJs.core.fileWatcher();
         },
 
-        getTagType(str) {
+        getTag(str) {
             let type;
             let tag;
-            let arguments;
-            let innerHTML;
+            let attributes = {};
+            let data;
 
-            if (str.match(/<\w+(\s+[^<\n]*(=("[^"]*"|'[^']*'|`[^`]*`)){0,1}\s*)*>/gim)) type = "html-start";
-            else if (str.match(/<\/\w+(\s+[^<\n]*(=("[^"]*"|'[^']*'|`[^`]*`)){0,1}\s*)*>/gim)) type = "html-end";
-            else if (str.match(/<\w+(\s+[^<\n]*(=("[^"]*"|'[^']*'|`[^`]*`)){0,1}\s*)*\/>/gim)) type = "html-empty";
+            if (str.match(/<\w+(\s+[^<\n]+(=("[^"\n]*"|'[^'\n]*'))\s*)*>/gim)) type = "html-start";
+            else if (str.match(/<\/\w+(\s+[^<\n]+(=("[^"\n]*"|'[^'\n]*'))\s*)*>/gim)) type = "html-end";
+            else if (str.match(/<\w+(\s+[^<\n]+(=("[^"\n]*"|'[^'\n]*'))\s*)*\/>/gim)) type = "html-empty";
             // else throw new Error("(direct.js):\nCould not compile.\nInvalid tag.\n");
 
-            if () 
+            if (type === "html-start") data = str.slice(1, -1);
+            else if(type === "html-end") data = str.slice(2, -1);
+            else data = str.slice(1, -2);
+
+            data = data.replace(/\s+[^<\n]+(=("[^"\n]*"|'[^'\n]*')){0,1}\s+/g, match => ` ${match.trim()} `).trim();
+            data = data.split(/\s/gi);
+            tag = data[0];
+            data.shift();
+            
+            if (data.length && type === "html-open" || type === "html-empty") {
+                data.map(attribute => {
+                    let temp = attribute.split("=");
+                    if (temp.length === 2) {
+                        let val = temp[1];
+                        if (val.startsWith("\"") || val.startsWith("'")) val = val.slice(1, -1);
+                        attributes[temp[0]] = val;
+
+                    } else if (temp.length === 1) attributes[temp[0]] = true;
+                });
+            }
 
             return {
                 type: type,
-                tag: ""
+                tag: tag,
+                attributes: attributes
             };
         },
 
@@ -105,14 +125,14 @@ const DirectJs = {
             let splitters = ["\"", "'", "`"];
 
             // Start tag
-            // <\w+(\s+[^<\n]*(=("[^"]*"|'[^']*'|`[^`]*`)){0,1}\s*)*>
+            // <\w+(\s+[^<\n]+(=("[^"\n]*"|'[^'\n]*'))\s*)*>
 
             splitters.map(splitter => {
                 let sectors = code.split(splitter);
                 if (sectors.length % 2 != 1) throw new Error("(direct.js):\nCould not compile.\nQuote was opened but not closed.\n");
 
                 for (let i = 0; i < sectors.length; i++) {
-                    if (i % 2 == 0 && sectors[i].match(/<\w+(\s+[^<\n]*(=("[^"]*"|'[^']*'|`[^`]*`)){0,1}\s*)*>/gim)) {
+                    if (i % 2 == 0 && sectors[i].match(/<\w+(\s+[^<\n]+(=("[^"\n]*"|'[^'\n]*'))\s*)*>/gim)) {
                         // sectors[i] 
 
                         // // Multiline
@@ -156,4 +176,5 @@ const DirectJs = {
     }
 }
 
+console.log(DirectJs.core.getTag("<h1    myAtr='lel' />"));
 DirectJs.core.init();
