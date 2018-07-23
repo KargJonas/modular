@@ -1,5 +1,3 @@
-/* Jonas Karg 2018 */
-
 const Modular = {
     data: {
         wrapper: document.createElement("div"),
@@ -78,11 +76,11 @@ const Modular = {
             return Modular.data.wrapper.innerHTML;
         },
 
+        // Gets a variables' content by its name
         getVariable(name) {
             if (!/[^0-9]\w*/.test(name)) return undefined;
             let value = window[name];
 
-            // fallback for let and const variables (sadly no other way)
             if (!value) {
                 try {
                     value = eval(name);
@@ -94,20 +92,24 @@ const Modular = {
             return value;
         },
 
-        getValue(value) {
+        // Transforms given element content (innerHTML) to string
+        getStr(value) {
+            if (!value) return null;
             if (value.constructor === String || value.constructor === Number) return value;
+            if (value instanceof Element) return value.outerHTML;
             if (value.constructor === Object) {
                 if (value.type === "modular-element") return Modular.core.renderElement(value);
                 else throw Modular.core.err(15, "core.getValue");
             }
+            if (value.constructor === Array) return value.map(arrEl => Modular.core.getStr(arrEl)).join("");
             throw Modular.core.err(15, "Value must be of type String, Number or Object", "core.getValue");
         },
 
         renderElement(context) {
-            if (!context.constructor === Object || context.type !== "modular-element") throw Modular.core.err(
+            if (context.constructor !== Object || context.type !== "modular-element") throw Modular.core.err(
                 10, "Invalid element.", "Must be of type Object.", "Create with Modular.el()", "core.renderElement");
 
-            let rendered;
+            let rendered = "";
             let tagVal;
 
             if (context.tag[0] == context.tag[0].toUpperCase()) {
@@ -116,22 +118,15 @@ const Modular = {
 
             if (tagVal) {
                 if (tagVal.constructor === Function) {
-                    rendered = Modular.core.getValue(tagVal(context.attributes || {}));
-                    if (!rendered) throw Modular.core.err(12, "Component-functions must return a value.", "core.renderElement");
-                } else rendered = Modular.core.getValue(tagVal);
+                    rendered = Modular.core.getStr(tagVal(context.attributes || {}) || "");
+                } else rendered = Modular.core.getStr(tagVal) || "";
 
-            } else {
-                if (context.innerHTML) {
-                    rendered = context.innerHTML.map(el => {
-                        return Modular.core.tag(context.tag, Modular.core.getValue(el), context.attributes);
-                    }).join("");
-                } else rendered = "";
-            }
+            } else rendered = Modular.core.tag(context.tag, context.attributes, Modular.core.getStr(context.innerHTML) || "");
 
             return rendered;
         },
 
-        tag(elementTag, elementInnerHTML, elementArguments) {
+        tag(elementTag, elementArguments, elementInnerHTML) {
             let elArgsConverted = "";
             if (elementArguments) elArgsConverted = " " + Object.entries(elementArguments).map(entry => `${entry[0]}="${entry[1]}"`).join(" ");
             element = `<${elementTag}${elArgsConverted}>${elementInnerHTML}</${elementTag}>`;
