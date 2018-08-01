@@ -1,6 +1,7 @@
 const Modular = {
     data: {
         wrapper: document.createElement("div"),
+        renderedEvent: new Event("mRendered"),
         ERRORS: {
             00: "Unknown Error",
             01: "Syntax Error",
@@ -160,5 +161,6 @@ const Modular = {
             10, "Invalid element.", "Must be of type Object.", "Create with Modular.el()", "render");
 
         container.innerHTML = Modular.core.renderElement(element);
+        window.dispatchEvent(Modular.data.renderedEvent);
     }
 };
