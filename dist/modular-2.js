@@ -26,13 +26,8 @@ const Modular = {
                 args.shift();
             }
 
-            if (args.length > 1) {
-                position = `\n--> @ Modular.${args.pop()}()`;
-            }
-
-            error = args.map(arg => {
-                return `\n--> ${arg}`;
-            });
+            if (args.length > 1) position = `\n--> @ Modular.${args.pop()}()`;
+            error = args.map(arg => `\n--> ${arg}`);
 
             return new Error(`(Modular)${type}:${error}\n${position}\n`);
         },
@@ -50,9 +45,7 @@ const Modular = {
         isElement(obj) {
             try { return obj instanceof HTMLElement }
             catch (e) {
-                return (typeof obj === "object") &&
-                    (obj.nodeType === 1) && (typeof obj.style === "object") &&
-                    (typeof obj.ownerDocument === "object");
+                return (typeof obj === "object") && (obj.nodeType === 1) && (typeof obj.style === "object") && (typeof obj.ownerDocument === "object");
             }
         },
 
@@ -142,6 +135,11 @@ const Modular = {
         args.splice(0, 2);
 
         if (typeof tag !== "string") throw Modular.core.err(10, "Invalid or missing tag attibute.", "el");
+        if (attributes && typeof attributes.style === "object") {
+            let wrapper = document.createElement("div");
+            Object.assign(wrapper.style, attributes.style);
+            attributes.style = wrapper.getAttribute("style");
+        }
 
         return {
             type: "modular-element",
