@@ -158,7 +158,7 @@ const Modular = {
             "Container must be an HTML-element.",
             "render");
 
-        container.innerHTML = Modular.core.renderElement(element);
+        container.innerHTML = Modular.core.getStr(element);
         window.dispatchEvent(Modular.data.renderedEvent);
     }
 };

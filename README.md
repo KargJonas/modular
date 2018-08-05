@@ -22,15 +22,15 @@ let myElement = Modular.el("div", { style: "background-color: #9ff" }, "Hello Wo
 <hr>
 
 ## Modular.render()
-Inserts the rendered content of a given Modular element or function into a DOM-element.
+Inserts the rendered content of a value (String, modular element, array, number, function, ...) into a DOM-element.
 ### Usage:
 ```js
 Modular.render(
-    MODULAR_ELEMENT/FUNCTION,
+    VALUE,
     DOM_ELEMENT
 );
 ```
-- MODULAR_ELEMENT/FUNCTION: A single modular element (created by Modular.el) or a function.
+- VALUE: A single modular element (created by Modular.el) or a function.
 - DOM_ELEMENT: The element, the modular element will be inserted into.
 
 ### Example:
