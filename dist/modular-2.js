@@ -3,8 +3,8 @@ const Modular = {
         wrapper: document.createElement("div"),
         renderedEvent: new Event("mRendered"),
         ERRORS: {
-            00: "Unknown Error",
-            01: "Syntax Error",
+            0: "Unknown Error",
+            1: "Syntax Error",
             10: "Invalid/Missing configuration",
             11: "Invalid insert",
             12: "Invalid component",
@@ -77,52 +77,51 @@ const Modular = {
             return Modular.data.wrapper.innerHTML;
         },
 
-        // Gets a variables' content by its name
         getVariable(name) {
             if (!/[^0-9]\w*/.test(name)) return undefined;
             let value = window[name];
 
             if (!value) {
-                try {
-                    value = eval(name);
-                } catch (e) {
-                    return undefined;
-                }
+                try { value = eval(name) }
+                catch (e) { return undefined }
             }
 
             return value;
         },
 
-        // Transforms given element content (innerHTML) to string
         getStr(value) {
             if (!value) return null;
             if (value.constructor === String || value.constructor === Number) return value;
             if (value instanceof Element) return value.outerHTML;
+            if (value.constructor === Function) return Modular.core.getStr(value());
             if (value.constructor === Object) {
                 if (value.type === "modular-element") return Modular.core.renderElement(value);
-                else throw Modular.core.err(15, "core.getValue");
+                else throw Modular.core.err(15, "core.getStr");
             }
             if (value.constructor === Array) return value.map(arrEl => Modular.core.getStr(arrEl)).join("");
-            throw Modular.core.err(15, "Value must be of type String, Number or Object", "core.getValue");
+            throw Modular.core.err(15, "Value must be of type String, Number or Object", "core.getStr");
         },
 
         renderElement(context) {
-            if (context.constructor !== Object || context.type !== "modular-element") throw Modular.core.err(
-                10, "Invalid element.", "Must be of type Object.", "Create with Modular.el()", "core.renderElement");
-
             let rendered = "";
-            let tagVal;
+            if (context.constructor === Function) rendered = Modular.core.getStr(context()) || "";
+            else {
+                if (context.constructor !== Object || context.type !== "modular-element") throw Modular.core.err(
+                    10, "Invalid element.", "Must be of type Object or Function.", "Create with Modular.el()", "core.renderElement");
 
-            if (context.tag[0] == context.tag[0].toUpperCase()) {
-                tagVal = Modular.core.getVariable(context.tag);
+                let tagVal;
+
+                if (context.tag[0] == context.tag[0].toUpperCase()) {
+                    tagVal = Modular.core.getVariable(context.tag);
+                }
+
+                if (tagVal) {
+                    if (tagVal.constructor === Function) {
+                        rendered = Modular.core.getStr(tagVal(context.attributes || {}) || "");
+                    } else rendered = Modular.core.getStr(tagVal) || "";
+
+                } else rendered = Modular.core.tag(context.tag, context.attributes, Modular.core.getStr(context.content) || "");
             }
-
-            if (tagVal) {
-                if (tagVal.constructor === Function) {
-                    rendered = Modular.core.getStr(tagVal(context.attributes || {}) || "");
-                } else rendered = Modular.core.getStr(tagVal) || "";
-
-            } else rendered = Modular.core.tag(context.tag, context.attributes, Modular.core.getStr(context.innerHTML) || "");
 
             return rendered;
         },
@@ -136,15 +135,19 @@ const Modular = {
         }
     },
 
-    el(tag, attributes, innerHTML) {
+    el() {
+        const args = Array.from(arguments);
+        const tag = args[0];
+        const attributes = args[1];
+        args.splice(0, 2);
+
         if (typeof tag !== "string") throw Modular.core.err(10, "Invalid or missing tag attibute.", "el");
-        if (innerHTML && innerHTML.constructor !== Array) innerHTML = [innerHTML];
 
         return {
             type: "modular-element",
             tag: tag,
             attributes: attributes || {},
-            innerHTML: innerHTML
+            content: args
         };
     },
 
@@ -156,9 +159,6 @@ const Modular = {
             10, "Invalid container",
             "Container must be an HTML-element.",
             "render");
-
-        if (!element.constructor === Object || element.type !== "modular-element") throw Modular.core.err(
-            10, "Invalid element.", "Must be of type Object.", "Create with Modular.el()", "render");
 
         container.innerHTML = Modular.core.renderElement(element);
         window.dispatchEvent(Modular.data.renderedEvent);
