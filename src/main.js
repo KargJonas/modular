@@ -1,3 +1,4 @@
+Modular.listenBinding("myBinding", value => console.log(value));
 
 function TestComp() {
     return [

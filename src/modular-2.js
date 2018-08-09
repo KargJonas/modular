@@ -64,6 +64,36 @@ const Modular = {
         }
     },
 
+    getBinding(_binding) {
+        const binding = Modular.data.bindings[_binding];
+        if (binding) return binding.value;
+
+        return undefined;
+    },
+
+    setBinding(_binding, value) {
+        if (!Modular.data.bindings[_binding]) {
+            Modular.data.bindings[_binding] = {
+                value: undefined,
+                elements: [],
+                listeners: [],
+                change(e) {
+                    Modular.data.bindings[_binding].listeners.map(listener => {
+                        listener(Modular.data.bindings[_binding].value, e);
+                    });
+                }
+            };
+        }
+
+        Modular.data.bindings[_binding].value = value;
+        Modular.data.bindings[_binding].change();
+    },
+
+    listenBinding(binding, listener) {
+        if (!Modular.data.bindings[binding]) Modular.setBinding(binding, undefined);
+        Modular.data.bindings[binding].listeners.push(listener);
+    },
+
     core: {
         err(i) {
             let args = Modular.data.ERRORS[i];
@@ -170,7 +200,7 @@ const Modular = {
         delete attributes.$bind;
         const binding = attributes.__config__.binding;
         attributes.__config__.element = Modular.core.makeEl(attributes.__config__.tag, attributes, Modular.core.getHtml(attributes.__config__.content));
-        
+
         if (binding) {
             attributes.__config__.element.addEventListener("click", e => attributes.__config__.change(e));
             attributes.__config__.element.addEventListener("change", e => attributes.__config__.change(e));
@@ -184,24 +214,13 @@ const Modular = {
         }
 
         if (binding) {
-            if (!Modular.data.bindings[binding]) {
-                Modular.data.bindings[binding] = {
-                    value: attributes.__config__.value,
-                    elements: [],
-                    listeners: [],
-                    change(e) {
-                        const val = Modular.data.bindings[binding].value;
-                        Modular.data.bindings[binding].listeners.map(listener => {
-                            listener(value, e);
-                        });
-
-                        Modular.data.bindings[binding].elements.map(element => {
-                            if (element.tagName == "INPUT") element.value = val;
-                            else element.innerHTML = val;
-                        });
-                    }
-                };
-            }
+            Modular.setBinding(binding, attributes.__config__.value);
+            Modular.listenBinding(binding, () => {
+                Modular.data.bindings[binding].elements.map(element => {
+                    if (element.tagName == "INPUT") element.value = Modular.data.bindings[binding].value;
+                    else element.innerHTML = Modular.data.bindings[binding].value;
+                });
+            });
 
             attributes.__config__.change = (e) => {
                 attributes.__config__.value = attributes.__config__.element.value || attributes.__config__.element.innerHTML;
@@ -247,19 +266,6 @@ const Modular = {
         if (!Modular.core.isElement(container)) throw Modular.core.err(8);
         Modular.core.getHtml(element, container);
         window.dispatchEvent(Modular.data.renderedEvent);
-    },
-
-    getBinding(binding) {
-        return Modular.data.bindings[binding].value;
-    },
-
-    setBinding(binding, value) {
-        Modular.data.bindings[binding].value = value;
-        Modular.data.bindings[binding].change();
-    },
-
-    listenBinding(binding, listener) {
-        Modular.data.bindings[binding].listeners.push(listener);
     }
 };
 
