@@ -30,7 +30,7 @@ const Modular = {
                 "Modular does not know how how to handle this.",
                 "core.getHtml"],
 
-            4: ["Invalid Input",
+            4: ["Invalid or missing Input",
                 "Unable to scan.",
                 "A value, which is not a [String] was passed into Modular.scan().",
                 "Modular.scan() expects a [String].",
@@ -59,7 +59,8 @@ const Modular = {
             8: ["Invalid Input",
                 "Unable to render",
                 "Modular.render() recieved an invalid container-element.",
-                "A container-element has to be a DOM-element, or a [String], containing a valid CSS-selector.",
+                "A container-element has to be a html-element, or a [String], containing a valid CSS-selector.",
+                "Keep in mind - if the element is not a child of <html>, you won't be able to see much.",
                 "render"]
         }
     },
@@ -106,13 +107,6 @@ const Modular = {
             return `🚨 (Modular): ${type}\n${error}\n${position}\n`;
         },
 
-        isElement(obj) {
-            try { return obj instanceof HTMLElement }
-            catch (e) {
-                return (typeof obj === "object") && (obj.nodeType === 1) && (typeof obj.style === "object") && (typeof obj.ownerDocument === "object");
-            }
-        },
-
         getAttr(attributes) {
             const obj = {};
 
@@ -123,31 +117,25 @@ const Modular = {
             return obj;
         },
 
-        getVariable(name) {
-            if (!/[^0-9]\w*/.test(name)) return undefined;
-            let value = window[name];
-
-            if (!value) {
-                try { value = eval(name) }
-                catch (e) { return undefined }
-            }
-
-            return value;
-        },
-
         getHtml(value, parent) {
             if (!value) return null;
-            else if (value instanceof Element) parent.appendChild(value);
-            else if (value.constructor === Function) Modular.core.getHtml(value(), parent);
-            else if (value.constructor === Array) value.map(arrEl => Modular.core.getHtml(arrEl, parent));
-            else if (value.constructor === String || value.constructor === Number) {
-                parent.appendChild(document.createTextNode(value));
-            }
+            let el;
+            if (value instanceof Element) el = value;
+            else if (value.constructor === Function) el = Modular.core.getHtml(value());
+            else if (value.constructor === Array) {
+                el = document.createElement("div");
+                value.map(arrEl => {
+                    el.appendChild(Modular.core.getHtml(arrEl));
+                });
+            } else if (value.constructor === String || value.constructor === Number) el = document.createTextNode(value);
             else if (value.constructor === Object) {
                 if (value.__config__ && value.__config__.type === "modular-element") {
-                    parent.appendChild(value.__config__.element);
+                    el = value.__config__.element;
                 } else throw Modular.core.err(2);
             } else throw Modular.core.err(3);
+
+            if (!parent) return el;
+            parent.appendChild(el);
         },
 
         getStyle(val) {
@@ -167,14 +155,12 @@ const Modular = {
             const element = document.createElement(tagName);
             const attributes = {};
             Object.assign(attributes, _attributes || {});
+
             delete attributes.__config__;
-
-            if (attributes && attributes.style) {
-                attributes.style = Modular.core.getStyle(attributes.style);
-            }
-
+            if (attributes && attributes.style) attributes.style = Modular.core.getStyle(attributes.style);
             Object.assign(element, attributes);
-            element.innerHTML = content || "";
+
+            if (content) element.appendChild(content);
             return element;
         }
     },
@@ -199,6 +185,7 @@ const Modular = {
 
         delete attributes.$bind;
         const binding = attributes.__config__.binding;
+
         attributes.__config__.element = Modular.core.makeEl(attributes.__config__.tag, attributes, Modular.core.getHtml(attributes.__config__.content));
 
         if (binding) {
@@ -211,14 +198,12 @@ const Modular = {
             attributes.__config__.element.addEventListener("mouseover", e => attributes.__config__.change(e));
             attributes.__config__.element.addEventListener("mouseout", e => attributes.__config__.change(e));
             attributes.__config__.element.addEventListener("contextmenu", e => attributes.__config__.change(e));
-        }
 
-        if (binding) {
             Modular.setBinding(binding, attributes.__config__.value);
-            Modular.listenBinding(binding, () => {
+            Modular.listenBinding(binding, value => {
                 Modular.data.bindings[binding].elements.map(element => {
-                    if (element.tagName == "INPUT") element.value = Modular.data.bindings[binding].value;
-                    else element.innerHTML = Modular.data.bindings[binding].value;
+                    if (element.tagName == "INPUT") element.value = value;
+                    else element.innerHTML = value;
                 });
             });
 
@@ -237,9 +222,8 @@ const Modular = {
 
     scan(val) {
         if (typeof val !== "string") throw new Error(Modular.data.ERRORS[4]);
-        let isOnlyText = true;
         let wrapper = document.createElement("div");
-        wrapper.innerHTML = val;
+        wrapper.innerHTML = val.trim();
 
         const res = Array.from(wrapper.childNodes).map(node => {
             if (node instanceof Element) {
@@ -248,9 +232,6 @@ const Modular = {
             } else return node.textContent;
         });
 
-        if (!res.length) return null;
-        if (res.length === 1) return res[0];
-        if (isOnlyText) return res.join("");
         return res;
     },
 
@@ -263,7 +244,7 @@ const Modular = {
             container = document.querySelector(_container);
         } else container = _container;
 
-        if (!Modular.core.isElement(container)) throw Modular.core.err(8);
+        if (!(container instanceof Element)) throw Modular.core.err(8);
         Modular.core.getHtml(element, container);
         window.dispatchEvent(Modular.data.renderedEvent);
     }

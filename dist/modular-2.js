@@ -1,173 +1,179 @@
 // Jonas Karg 2018
-
-function mel() {
-    const args = Array.from(arguments);
-    const tag = args[0];
-    const attributes = args[1];
-    args.splice(0, 2);
-
-    if (typeof tag !== "string") throw Modular.core.err(10, "Invalid or missing tag attibute.", "el");
-    if (attributes && typeof attributes.style === "object") {
-        let wrapper = document.createElement("div");
-        Object.assign(wrapper.style, attributes.style);
-        attributes.style = wrapper.getAttribute("style");
-    }
-
-    return {
-        type: "modular-element",
-        tag: tag,
-        attributes: attributes || {},
-        content: args
-    };
-}
+"use strict";
 
 const Modular = {
     data: {
-        wrapper: document.createElement("div"),
+        bindings: {},
         renderedEvent: new Event("mRendered"),
-        ERRORS: {
-            0: "Unknown Error",
-            1: "Syntax Error",
-            10: "Invalid/Missing configuration",
-            11: "Invalid insert",
-            12: "Invalid component",
-            13: "Invalid component-instance",
-            14: "Invalid element-content",
-            15: "Invalid passed-in value"
+        onRender: new Event("mOnRender")
+    },
+
+    getBinding(_binding) {
+        const binding = Modular.data.bindings[_binding];
+        if (binding) return binding.value;
+
+        return undefined;
+    },
+
+    setBinding(_binding, value) {
+        if (!Modular.data.bindings[_binding]) {
+            Modular.data.bindings[_binding] = {
+                value: undefined,
+                elements: [],
+                listeners: [],
+                change(e) {
+                    Modular.data.bindings[_binding].listeners.map(listener => {
+                        listener(Modular.data.bindings[_binding].value, e);
+                    });
+                }
+            };
         }
+
+        Modular.data.bindings[_binding].value = value;
+        Modular.data.bindings[_binding].change();
+    },
+
+    listenBinding(binding, listener) {
+        if (!Modular.data.bindings[binding]) Modular.setBinding(binding, undefined);
+        Modular.data.bindings[binding].listeners.push(listener);
     },
 
     core: {
-        err() {
-            let args = Array.from(arguments);
-            let type = "";
-            let position = "";
-            let error;
+        getAttr(attributes) {
+            const obj = {};
 
-            if (args[0].constructor === Number) {
-                type = ` [${Modular.data.ERRORS[args[0]]}]`;
-                args.shift();
-            }
-
-            if (args.length > 1) position = `\n--> @ Modular.${args.pop()}()`;
-            error = args.map(arg => `\n--> ${arg}`);
-
-            return new Error(`(Modular)${type}:${error}\n${position}\n`);
-        },
-
-        info() {
-            let args = Array.from(arguments);
-            let inf = "Info: (Modular):\n";
-
-            for (let i = 0; i < arguments.length - 1; i++) inf += `--> ${args[i]}\n`;
-            inf += `\n--> @ ${args[args.length - 1]}()`;
-
-            return inf;
-        },
-
-        isElement(obj) {
-            try { return obj instanceof HTMLElement }
-            catch (e) {
-                return (typeof obj === "object") && (obj.nodeType === 1) && (typeof obj.style === "object") && (typeof obj.ownerDocument === "object");
-            }
-        },
-
-        getProps(arr) {
-            let obj = {};
-
-            arr.map(el => {
-                let temp = el.split("=");
-                let key = temp[0];
-                let val = temp[1];
-                if (val[0] == "\"" || val[0] == "'") val = val.substring(1, val.length - 1);
-                else if (val[0] == "{") val = eval(val.substring(1, val.length - 1));
-                obj[key] = val;
+            Array.from(attributes).map(attribute => {
+                obj[attribute.name] = attribute.value;
             });
 
             return obj;
         },
 
-        toHtml(el) {
-            Modular.data.wrapper.innerHTML = null;
-            Modular.data.wrapper.appendChild(el);
-            return Modular.data.wrapper.innerHTML;
-        },
-
-        getVariable(name) {
-            if (!/[^0-9]\w*/.test(name)) return undefined;
-            let value = window[name];
-
-            if (!value) {
-                try { value = eval(name) }
-                catch (e) { return undefined }
-            }
-
-            return value;
-        },
-
-        getStr(value) {
+        getHtml(value, parent) {
             if (!value) return null;
-            if (value.constructor === String || value.constructor === Number) return value;
-            if (value instanceof Element) return value.outerHTML;
-            if (value.constructor === Function) return Modular.core.getStr(value());
-            if (value.constructor === Object) {
-                if (value.type === "modular-element") return Modular.core.renderElement(value);
-                else throw Modular.core.err(15, "core.getStr");
-            }
-            if (value.constructor === Array) return value.map(arrEl => Modular.core.getStr(arrEl)).join("");
-            throw Modular.core.err(15, "Value must be of type String, Number or Object", "core.getStr");
+            let el;
+            if (value instanceof Element) el = value;
+            else if (value.constructor === Function) el = Modular.core.getHtml(value());
+            else if (value.constructor === Array) {
+                el = document.createElement("div");
+                value.map(arrEl => {
+                    el.appendChild(Modular.core.getHtml(arrEl));
+                });
+            } else if (value.constructor === String || value.constructor === Number) el = document.createTextNode(value);
+            else if (value.constructor === Object) {
+                if (value.__config__ && value.__config__.type === "modular-element") {
+                    el = value.__config__.element;
+                } else throw Modular.core.err(2);
+            } else throw Modular.core.err(3);
+
+            if (!parent) return el;
+            parent.appendChild(el);
         },
 
-        renderElement(context) {
-            let rendered = "";
-            if (context.constructor === Function) rendered = Modular.core.getStr(context()) || "";
-            else {
-                if (context.constructor !== Object || context.type !== "modular-element") throw Modular.core.err(
-                    10, "Invalid element.", "Must be of type Object or Function.", "Create with Modular.el()", "core.renderElement");
-
-                let tagVal;
-
-                if (context.tag[0] == context.tag[0].toUpperCase()) {
-                    tagVal = Modular.core.getVariable(context.tag);
-                }
-
-                if (tagVal) {
-                    if (tagVal.constructor === Function) {
-                        rendered = Modular.core.getStr(tagVal(context.attributes || {}) || "");
-                    } else rendered = Modular.core.getStr(tagVal) || "";
-
-                } else rendered = Modular.core.tag(context.tag, context.attributes, Modular.core.getStr(context.content) || "");
+        getStyle(val) {
+            let style = val;
+            if (typeof style === "function") style = style();
+            if (typeof style === "object") {
+                const wrapper = document.createElement("div");
+                Object.assign(wrapper.style, style);
+                style = wrapper.getAttribute("style");
             }
 
-            return rendered;
+            return style;
         },
 
-        tag(elementTag, elementArguments, elementInnerHTML) {
-            let elArgsConverted = "";
-            if (elementArguments) elArgsConverted = " " + Object.entries(elementArguments).map(entry => `${entry[0]}="${entry[1]}"`).join(" ");
-            element = `<${elementTag}${elArgsConverted}>${elementInnerHTML}</${elementTag}>`;
+        makeEl(tagName, _attributes, content) {
+            const element = document.createElement(tagName);
+            const attributes = {};
+            Object.assign(attributes, _attributes || {});
 
+            delete attributes.__config__;
+            if (attributes && attributes.style) attributes.style = Modular.core.getStyle(attributes.style);
+            Object.assign(element, attributes);
+
+            if (content) element.appendChild(content);
             return element;
         }
     },
 
-    el: mel,
+    el() {
+        const args = Array.from(arguments);
+        const tag = args[0];
+        const attributes = args[1] || {};
+        args.splice(0, 2);
+
+        if (attributes.__config__ !== undefined) throw Error(Modular.core.err(1));
+
+        attributes.__config__ = {
+            type: "modular-element",
+            tag: tag,
+            content: args,
+            binding: attributes.$bind,
+            value: attributes.value || args,
+            element: undefined
+        };
+
+        delete attributes.$bind;
+        const binding = attributes.__config__.binding;
+
+        attributes.__config__.element = Modular.core.makeEl(attributes.__config__.tag, attributes, Modular.core.getHtml(attributes.__config__.content));
+
+        if (binding) {
+            attributes.__config__.element.addEventListener("click", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("change", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("hover", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("keyup", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("keydown", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("scroll", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("mouseover", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("mouseout", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("contextmenu", e => attributes.__config__.change(e));
+
+            Modular.setBinding(binding, attributes.__config__.value);
+            Modular.listenBinding(binding, value => {
+                Modular.data.bindings[binding].elements.map(element => {
+                    if (element.tagName == "INPUT") element.value = value;
+                    else element.innerHTML = value;
+                });
+            });
+
+            attributes.__config__.change = (e) => {
+                attributes.__config__.value = attributes.__config__.element.value || attributes.__config__.element.innerHTML;
+                Modular.data.bindings[binding].value = attributes.__config__.value;
+                Modular.data.bindings[binding].change();
+            }
+
+            Modular.data.bindings[binding].elements.push(attributes.__config__.element);
+            Modular.data.bindings[binding].change();
+        }
+
+        return attributes;
+    },
+
+    scan(val) {
+        let wrapper = document.createElement("div");
+        wrapper.innerHTML = val.trim();
+
+        const res = Array.from(wrapper.childNodes).map(node => {
+            if (node instanceof Element) {
+                isOnlyText = false;
+                return Modular.el(node.tagName, Modular.core.getAttr(node.attributes), Modular.scan(node.innerHTML));
+            } else return node.textContent;
+        });
+
+        return res;
+    },
 
     render(element, _container) {
-        if (!element || !_container) throw Modular.core.err(
-            10, "Missing element or container.", "render");
-
+        window.dispatchEvent(Modular.data.onRender);
         let container;
+
         if (typeof _container === "string") {
             container = document.querySelector(_container);
         } else container = _container;
 
-        if (!Modular.core.isElement(container)) throw Modular.core.err(
-            10, "Invalid container",
-            "Container must be an HTML-element or a valid selector-string.",
-            "render");
-
-        container.innerHTML = Modular.core.getStr(element);
+        if (!(container instanceof Element)) throw Modular.core.err(8);
+        Modular.core.getHtml(element, container);
         window.dispatchEvent(Modular.data.renderedEvent);
     }
 };
