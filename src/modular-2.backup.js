@@ -17,17 +17,17 @@ const Modular = {
                 "el"],
 
             2: ["Invalid Input",
-                "An object, which is not a Modular-element, was passed into Modular.core.getHtml().",
-                "( Modular.core.getHtml() was called by Modular.render() )",
+                "An object, which is not a Modular-element, was passed into Modular.core.getStr().",
+                "( Modular.core.getStr() was called by Modular.render() )",
                 "Modular does not know how how to handle this.",
-                "core.getHtml"],
+                "core.getStr"],
 
             3: ["Invalid Input",
-                "A value, which is not a [String], [Number], [Element] (html), [Function], [Object] or [Array], was passed into Modular.core.getHtml().",
-                "( Modular.core.getHtml() was called by Modular.render() )",
+                "A value, which is not a [String], [Number], [Element] (html), [Function], [Object] or [Array], was passed into Modular.core.getStr().",
+                "( Modular.core.getStr() was called by Modular.render() )",
                 "This error might be caused by a invalid child-element in Modular.render() or Modular.el().",
                 "Modular does not know how how to handle this.",
-                "core.getHtml"],
+                "core.getStr"],
 
             4: ["Invalid Input",
                 "Unable to scan.",
@@ -104,18 +104,20 @@ const Modular = {
             return value;
         },
 
-        getHtml(value, parent) {
-            if (!value) return null; // You are my everything.
-            else if (value instanceof Element) parent.appendChild(value);
-            else if (value.constructor === Function) Modular.core.getHtml(value(), parent);
-            else if (value.constructor === Array) value.map(arrEl => Modular.core.getHtml(arrEl, parent));
-            else if (value.constructor === String || value.constructor === Number) {
-                parent.appendChild(document.createTextNode(value));
-            }
-            else if (value.constructor === Object) {
+        getStr(value) {
+            if (!value) return null;
+            if (value.constructor === String || value.constructor === Number) return value;
+            if (value instanceof Element) return value.outerHTML;
+            if (value.constructor === Function) return Modular.core.getStr(value());
+            if (value.constructor === Array) return value.map(arrEl => Modular.core.getStr(arrEl)).join("");
+            if (value.constructor === Object) {
                 if (value.__config__ && value.__config__.type === "modular-element") {
-                    const el = Modular.core.makeEl(value.__config__.tag, value, Modular.core.getHtml(value.__config__.content));
-                    parent.appendChild(el);
+                    const attributes = {};
+                    Object.assign(attributes, value);
+                    delete attributes.__config__;
+
+                    if (attributes && attributes.style) attributes.style = Modular.core.getStyle(attributes.style);
+                    return Modular.core.getStr(Modular.core.tag(value.__config__.tag, attributes, Modular.core.getStr(value.__config__.content)));
                 } else throw Modular.core.err(2);
             } else throw Modular.core.err(3);
         },
@@ -133,19 +135,14 @@ const Modular = {
             return style;
         },
 
-        makeEl(tagName, _attributes, content) {
+        tag(tagName, attributes, content) {
             const element = document.createElement(tagName);
-            const attributes = {};
-            Object.assign(attributes, _attributes || {});
-            delete attributes.__config__;
-
-            if (attributes && attributes.style) {
-                attributes.style = Modular.core.getStyle(attributes.style);
-            }
-
             Object.assign(element, attributes);
-            element.innerHTML = content || "";
+            element.innerHTML = content;
             return element;
+
+            // let attribs = Object.entries(attributes).map(entry => `${entry[0]}="${entry[1]}"`).join(" ");
+            // return `<${tagName} ${attribs}>${content}</${tagName}>`;
         }
     },
 
@@ -196,7 +193,7 @@ const Modular = {
         } else container = _container;
 
         if (!Modular.core.isElement(container)) throw Modular.core.err(8);
-        Modular.core.getHtml(element, container);
+        container.innerHTML = Modular.core.getStr(element);
         window.dispatchEvent(Modular.data.renderedEvent);
     }
 };
