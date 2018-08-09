@@ -3,6 +3,7 @@
 
 const Modular = {
     data: {
+        bindings: {},
         renderedEvent: new Event("mRendered"),
         onRender: new Event("mOnRender"),
         ERRORS: {
@@ -105,7 +106,7 @@ const Modular = {
         },
 
         getHtml(value, parent) {
-            if (!value) return null; // You are my everything.
+            if (!value) return null;
             else if (value instanceof Element) parent.appendChild(value);
             else if (value.constructor === Function) Modular.core.getHtml(value(), parent);
             else if (value.constructor === Array) value.map(arrEl => Modular.core.getHtml(arrEl, parent));
@@ -114,8 +115,7 @@ const Modular = {
             }
             else if (value.constructor === Object) {
                 if (value.__config__ && value.__config__.type === "modular-element") {
-                    const el = Modular.core.makeEl(value.__config__.tag, value, Modular.core.getHtml(value.__config__.content));
-                    parent.appendChild(el);
+                    parent.appendChild(value.__config__.element);
                 } else throw Modular.core.err(2);
             } else throw Modular.core.err(3);
         },
@@ -161,8 +161,57 @@ const Modular = {
         attributes.__config__ = {
             type: "modular-element",
             tag: tag,
-            content: args
+            content: args,
+            binding: attributes.$bind,
+            value: attributes.value || args,
+            element: undefined
         };
+
+        delete attributes.$bind;
+        const binding = attributes.__config__.binding;
+        attributes.__config__.element = Modular.core.makeEl(attributes.__config__.tag, attributes, Modular.core.getHtml(attributes.__config__.content));
+        
+        if (binding) {
+            attributes.__config__.element.addEventListener("click", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("change", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("hover", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("keyup", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("keydown", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("scroll", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("mouseover", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("mouseout", e => attributes.__config__.change(e));
+            attributes.__config__.element.addEventListener("contextmenu", e => attributes.__config__.change(e));
+        }
+
+        if (binding) {
+            if (!Modular.data.bindings[binding]) {
+                Modular.data.bindings[binding] = {
+                    value: attributes.__config__.value,
+                    elements: [],
+                    listeners: [],
+                    change(e) {
+                        const val = Modular.data.bindings[binding].value;
+                        Modular.data.bindings[binding].listeners.map(listener => {
+                            listener(value, e);
+                        });
+
+                        Modular.data.bindings[binding].elements.map(element => {
+                            if (element.tagName == "INPUT") element.value = val;
+                            else element.innerHTML = val;
+                        });
+                    }
+                };
+            }
+
+            attributes.__config__.change = (e) => {
+                attributes.__config__.value = attributes.__config__.element.value || attributes.__config__.element.innerHTML;
+                Modular.data.bindings[binding].value = attributes.__config__.value;
+                Modular.data.bindings[binding].change();
+            }
+
+            Modular.data.bindings[binding].elements.push(attributes.__config__.element);
+            Modular.data.bindings[binding].change();
+        }
 
         return attributes;
     },
@@ -198,6 +247,19 @@ const Modular = {
         if (!Modular.core.isElement(container)) throw Modular.core.err(8);
         Modular.core.getHtml(element, container);
         window.dispatchEvent(Modular.data.renderedEvent);
+    },
+
+    getBinding(binding) {
+        return Modular.data.bindings[binding].value;
+    },
+
+    setBinding(binding, value) {
+        Modular.data.bindings[binding].value = value;
+        Modular.data.bindings[binding].change();
+    },
+
+    listenBinding(binding, listener) {
+        Modular.data.bindings[binding].listeners.push(listener);
     }
 };
 

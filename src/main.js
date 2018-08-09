@@ -1,9 +1,8 @@
-let testBind = "Hello World";
 
 function TestComp() {
     return [
-        Modular.el("input", { $bind: testBind, placeholder: "Input" }),
-        Modular.el("h1", { $bind: testBind })
+        Modular.el("input", { $bind: "myBinding", placeholder: "Input", value: "test" }),
+        Modular.el("h1", { $bind: "myBinding" })
     ];
 }
 
