@@ -1,3 +1,5 @@
+# !! Warning: This documentation is outdated !!
+
 # Modular 2
 #### - Modular 2 is a very thin layer of automation in UI-creation.
 #### - It allows you to do many things that frameworks such as React allow you to do, just in a smaller form-factor.
