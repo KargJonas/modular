@@ -1,10 +1,10 @@
-function TestComp() {
-    return [
-        Modular.el("h1", { $bind: "myBinding" }),
-        Modular.el("input", { $bind: "myBinding", placeholder: "Input", value: "Test" })
-    ];
+let users = ["Bill", "Hopper", "Mark", "Linus"];
+
+function MyComponent() {
+    return users.map(user => Modular.el("li", null, user));
 }
 
-const t = performance.now();
-Modular.render(TestComp, "#root");
-console.log(performance.now() - t);
+Modular.render(
+    MyComponent,
+    document.querySelector("#root"),
+);

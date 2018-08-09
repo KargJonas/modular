@@ -8,7 +8,7 @@ const Modular = {
         onRender: new Event("mOnRender"),
         ERRORS: {
             0: ["Info",
-                "You are using the development build of Modular 2. Make sure to use the production build when deploying this app."],
+                "You are using the development build of Modular-2. Make sure to use the production build when deploying this app."],
 
             1: ["Invalid Attribute",
                 "Unable to create Modular element.",
@@ -104,7 +104,7 @@ const Modular = {
             const position = (args.length > 1) ? `\n@ Modular.${args.pop()}()` : "";
             const error = args.map(arg => `\n--> ${arg}\n`).join("");
 
-            return `🚨 (Modular): ${type}\n${error}\n${position}\n`;
+            return `🚨 (Modular-2): ${type}\n${error}\n${position}\n`;
         },
 
         getAttr(attributes) {
@@ -124,14 +124,11 @@ const Modular = {
             else if (value.constructor === Function) el = Modular.core.getHtml(value());
             else if (value.constructor === Array) {
                 el = document.createElement("div");
-                value.map(arrEl => {
-                    el.appendChild(Modular.core.getHtml(arrEl));
-                });
+                value.map(arrEl => el.appendChild(Modular.core.getHtml(arrEl)));
             } else if (value.constructor === String || value.constructor === Number) el = document.createTextNode(value);
             else if (value.constructor === Object) {
-                if (value.__config__ && value.__config__.type === "modular-element") {
-                    el = value.__config__.element;
-                } else throw Modular.core.err(2);
+                if (value.__config__ && value.__config__.type === "modular-element") el = value.__config__.element;
+                else throw Modular.core.err(2);
             } else throw Modular.core.err(3);
 
             if (!parent) return el;
@@ -166,10 +163,11 @@ const Modular = {
     },
 
     el() {
-        const args = Array.from(arguments);
+        let args = Array.from(arguments);
         const tag = args[0];
         const attributes = args[1] || {};
         args.splice(0, 2);
+        if (args.length === 1) args = args[0];
 
         if (typeof tag !== "string") throw new Error(Modular.core.err(5));
         if (attributes.__config__ !== undefined) throw Error(Modular.core.err(1));

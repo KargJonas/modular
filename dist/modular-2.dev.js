@@ -166,10 +166,11 @@ const Modular = {
     },
 
     el() {
-        const args = Array.from(arguments);
+        let args = Array.from(arguments);
         const tag = args[0];
         const attributes = args[1] || {};
         args.splice(0, 2);
+        if (args.length === 1) args = args[0];
 
         if (typeof tag !== "string") throw new Error(Modular.core.err(5));
         if (attributes.__config__ !== undefined) throw Error(Modular.core.err(1));
