@@ -1,3 +1,26 @@
+// Jonas Karg 2018
+
+function mel() {
+    const args = Array.from(arguments);
+    const tag = args[0];
+    const attributes = args[1];
+    args.splice(0, 2);
+
+    if (typeof tag !== "string") throw Modular.core.err(10, "Invalid or missing tag attibute.", "el");
+    if (attributes && typeof attributes.style === "object") {
+        let wrapper = document.createElement("div");
+        Object.assign(wrapper.style, attributes.style);
+        attributes.style = wrapper.getAttribute("style");
+    }
+
+    return {
+        type: "modular-element",
+        tag: tag,
+        attributes: attributes || {},
+        content: args
+    };
+}
+
 const Modular = {
     data: {
         wrapper: document.createElement("div"),
@@ -128,34 +151,20 @@ const Modular = {
         }
     },
 
-    el() {
-        const args = Array.from(arguments);
-        const tag = args[0];
-        const attributes = args[1];
-        args.splice(0, 2);
+    el: mel,
 
-        if (typeof tag !== "string") throw Modular.core.err(10, "Invalid or missing tag attibute.", "el");
-        if (attributes && typeof attributes.style === "object") {
-            let wrapper = document.createElement("div");
-            Object.assign(wrapper.style, attributes.style);
-            attributes.style = wrapper.getAttribute("style");
-        }
-
-        return {
-            type: "modular-element",
-            tag: tag,
-            attributes: attributes || {},
-            content: args
-        };
-    },
-
-    render(element, container) {
-        if (!element || !container) throw Modular.core.err(
+    render(element, _container) {
+        if (!element || !_container) throw Modular.core.err(
             10, "Missing element or container.", "render");
+
+        let container;
+        if (typeof _container === "string") {
+            container = document.querySelector(_container);
+        } else container = _container;
 
         if (!Modular.core.isElement(container)) throw Modular.core.err(
             10, "Invalid container",
-            "Container must be an HTML-element.",
+            "Container must be an HTML-element or a valid selector-string.",
             "render");
 
         container.innerHTML = Modular.core.getStr(element);
