@@ -127,7 +127,10 @@ const Modular = {
                 value.map(arrEl => el.appendChild(Modular.core.getHtml(arrEl)));
             } else if (value.constructor === String || value.constructor === Number) el = document.createTextNode(value);
             else if (value.constructor === Object) {
-                if (value.__config__ && value.__config__.type === "modular-element") el = value.__config__.element;
+                if (value.__config__ && value.__config__.type === "modular-element") {
+                    value.__config__.render();
+                    el = value.__config__.element;
+                }
                 else throw Modular.core.err(2);
             } else throw Modular.core.err(3);
 
@@ -178,43 +181,45 @@ const Modular = {
             content: args,
             binding: attributes.$bind,
             value: attributes.value || args,
-            element: undefined
+            element: null
         };
 
         delete attributes.$bind;
-        const binding = attributes.__config__.binding;
 
-        attributes.__config__.element = Modular.core.makeEl(attributes.__config__.tag, attributes, Modular.core.getHtml(attributes.__config__.content));
+        attributes.__config__.render = () => {
+            const binding = attributes.__config__.binding;
+            attributes.__config__.element = Modular.core.makeEl(attributes.__config__.tag, attributes, Modular.core.getHtml(attributes.__config__.content));
 
-        if (binding) {
-            attributes.__config__.element.addEventListener("click", e => attributes.__config__.change(e));
-            attributes.__config__.element.addEventListener("change", e => attributes.__config__.change(e));
-            attributes.__config__.element.addEventListener("hover", e => attributes.__config__.change(e));
-            attributes.__config__.element.addEventListener("keyup", e => attributes.__config__.change(e));
-            attributes.__config__.element.addEventListener("keydown", e => attributes.__config__.change(e));
-            attributes.__config__.element.addEventListener("scroll", e => attributes.__config__.change(e));
-            attributes.__config__.element.addEventListener("mouseover", e => attributes.__config__.change(e));
-            attributes.__config__.element.addEventListener("mouseout", e => attributes.__config__.change(e));
-            attributes.__config__.element.addEventListener("contextmenu", e => attributes.__config__.change(e));
+            if (binding) {
+                attributes.__config__.element.addEventListener("click", e => attributes.__config__.change(e));
+                attributes.__config__.element.addEventListener("change", e => attributes.__config__.change(e));
+                attributes.__config__.element.addEventListener("hover", e => attributes.__config__.change(e));
+                attributes.__config__.element.addEventListener("keyup", e => attributes.__config__.change(e));
+                attributes.__config__.element.addEventListener("keydown", e => attributes.__config__.change(e));
+                attributes.__config__.element.addEventListener("scroll", e => attributes.__config__.change(e));
+                attributes.__config__.element.addEventListener("mouseover", e => attributes.__config__.change(e));
+                attributes.__config__.element.addEventListener("mouseout", e => attributes.__config__.change(e));
+                attributes.__config__.element.addEventListener("contextmenu", e => attributes.__config__.change(e));
 
-            Modular.setBinding(binding, attributes.__config__.value);
-            Modular.listenBinding(binding, value => {
-                Modular.data.bindings[binding].elements.map(element => {
-                    if (element.tagName == "INPUT") element.value = value;
-                    else element.innerHTML = value;
+                Modular.setBinding(binding, attributes.__config__.value);
+                Modular.listenBinding(binding, value => {
+                    Modular.data.bindings[binding].elements.map(element => {
+                        if (element.tagName == "INPUT") element.value = value;
+                        else element.innerHTML = value;
+                    });
                 });
-            });
 
-            attributes.__config__.change = (e) => {
-                attributes.__config__.value = attributes.__config__.element.value || attributes.__config__.element.innerHTML;
-                Modular.data.bindings[binding].value = attributes.__config__.value;
+                attributes.__config__.change = (e) => {
+                    attributes.__config__.value = attributes.__config__.element.value || attributes.__config__.element.innerHTML;
+                    Modular.data.bindings[binding].value = attributes.__config__.value;
+                    Modular.data.bindings[binding].change();
+                }
+
+                Modular.data.bindings[binding].elements.push(attributes.__config__.element);
                 Modular.data.bindings[binding].change();
             }
-
-            Modular.data.bindings[binding].elements.push(attributes.__config__.element);
-            Modular.data.bindings[binding].change();
+            return attributes.__config__.element;
         }
-
         return attributes;
     },
 
