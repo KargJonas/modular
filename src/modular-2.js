@@ -118,8 +118,9 @@ const Modular = {
         },
 
         getHtml(value, parent) {
-            if (!value) return null;
             let el;
+            value = value || "";
+
             if (value instanceof Element) el = value;
             else if (value.constructor === Function) el = Modular.core.getHtml(value());
             else if (value.constructor === Array) {
@@ -127,10 +128,7 @@ const Modular = {
                 value.map(arrEl => el.appendChild(Modular.core.getHtml(arrEl)));
             } else if (value.constructor === String || value.constructor === Number) el = document.createTextNode(value);
             else if (value.constructor === Object) {
-                if (value.__config__ && value.__config__.type === "modular-element") {
-                    value.__config__.render();
-                    el = value.__config__.element;
-                }
+                if (value.__config__ && value.__config__.type === "modular-element") el = value.__config__.render();
                 else throw Modular.core.err(2);
             } else throw Modular.core.err(3);
 
