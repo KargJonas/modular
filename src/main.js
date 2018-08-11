@@ -6,20 +6,19 @@ let style = {
 function MyComponent() {
     return [
         Modular.el("input", {
-            type: "text",
-            style: style,
-            $bind: {
-                value: "textboxBinding",
-            }
-        }),
-
-        Modular.el("input", {
             type: "checkbox",
             style: style,
             $bind: {
                 checked: "textboxBinding",
             }
         }),
+
+        Modular.el("p", {
+            style: style,
+            $bind: {
+                innerHTML: "textboxBinding",
+            }
+        }, "false")
     ];
 }
 
@@ -29,5 +28,3 @@ Modular.render(
     document.querySelector("#root"),
 );
 console.log(performance.now() - t);
-
-Modular.listenBinding("textboxBinding", val => console.log(val));

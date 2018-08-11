@@ -99,9 +99,7 @@ const Modular = {
         Modular.data.bindings[binding].lastValue = Modular.data.bindings[binding].value;
         Modular.data.bindings[binding].value = value;
         Modular.data.bindings[binding].elements.map(element => {
-            if (Modular.data.bindings[binding].value == "true") element.element[element.value] = true;
-            else if (Modular.data.bindings[binding].value == "false") element.element[element.value] = false;
-            else element.element[element.value] = Modular.data.bindings[binding].value;
+            element.element[element.value] = Modular.data.bindings[binding].value;
         });
     },
 
@@ -218,8 +216,26 @@ const Modular = {
 
             // Only add the binding logic if there was a binding-object passed in
             if (typeof attributes.__config__.bindings === "object") {
+                attributes.__config__.change = () => {
+                    // Updating all of the element's bindings
+                    Object.entries(attributes.__config__.bindings).map(entry => {
+                        let newVal = attributes.__config__.element[entry[0]];
+                        if (newVal == "true") newVal = true;
+                        else if (newVal == "false") newVal = false;
+
+                        Modular.setBinding(entry[1], newVal);
+                        // Checking if there actually were changes
+                        if (Modular.data.bindings[entry[1]].value !== Modular.data.bindings[entry[1]].lastValue || typeof Modular.data.bindings[entry[1]].value === "object" || typeof Modular.data.bindings[entry[1]].value === "array") {
+                            // Running all listeners
+                            Modular.data.bindings[entry[1]].listeners.map(listener => {
+                                listener(Modular.getBinding(entry[1]))
+                            });
+                        }
+                    });
+                };
+
                 Object.entries(attributes.__config__.bindings).map(entry => {
-                    // Sreating a binding if not already existing
+                    // Creating a binding if the binding-name doesn't exist
                     if (!Modular.data.bindings[entry[1]]) {
                         Modular.data.bindings[entry[1]] = {
                             elements: [], // The elements bound to the binding
@@ -236,20 +252,6 @@ const Modular = {
                         value: entry[0] // The attribute that has to change
                     });
                 });
-
-                attributes.__config__.change = () => {
-                    // Updating all of the element's bindings
-                    Object.entries(attributes.__config__.bindings).map(entry => {
-                        Modular.setBinding(entry[1], attributes.__config__.element[entry[0]]);
-                        // Checking if there actually were changes
-                        if (Modular.data.bindings[entry[1]].value !== Modular.data.bindings[entry[1]].lastValue || typeof Modular.data.bindings[entry[1]].value === "object" || typeof Modular.data.bindings[entry[1]].value === "array") {
-                            // Running all listeners
-                            Modular.data.bindings[entry[1]].listeners.map(listener => {
-                                listener(attributes.__config__.element[entry[0]])
-                            });
-                        }
-                    });
-                };
 
                 // Adding all relevant eventlisteners to the before created DOM-element
                 attributes.__config__.element.addEventListener("mouseover", e => attributes.__config__.change(e));
