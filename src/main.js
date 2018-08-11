@@ -23,7 +23,11 @@ function MyComponent() {
     ];
 }
 
+const t = performance.now();
 Modular.render(
     MyComponent,
     document.querySelector("#root"),
 );
+console.log(performance.now() - t);
+
+Modular.listenBinding("textboxBinding", val => console.log(val));
