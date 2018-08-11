@@ -1,15 +1,29 @@
-let users = ["Bill", "Hopper", "Mark", "Linus"];
+let style = {
+    display: "inline-flex",
+    margin: 0
+};
 
 function MyComponent() {
-    return users.map(user => [
-        Modular.el("li"),
-        Modular.el("input", { type: "text", value: user })
-    ]);    
+    return [
+        Modular.el("input", {
+            type: "text",
+            style: style,
+            $bind: {
+                value: "textboxBinding",
+            }
+        }),
+
+        Modular.el("input", {
+            type: "checkbox",
+            style: style,
+            $bind: {
+                checked: "textboxBinding",
+            }
+        }),
+    ];
 }
 
-const t = performance.now();
 Modular.render(
     MyComponent,
     document.querySelector("#root"),
 );
-console.log(performance.now() - t);
