@@ -6,7 +6,7 @@ const Modular = {
         bindings: {},
         renderedEvent: new Event("mRendered"),
         onRender: new Event("mOnRender"),
-        ERRORS: {
+        errors: {
             0: ["Info",
                 "You are using the development build of Modular-2. Make sure to use the production build when deploying this app."],
 
@@ -14,7 +14,6 @@ const Modular = {
                 "Unable to create Modular element.",
                 "Invalid attribute.",
                 `The attribute "__config__" is reserved for Modular.`,
-                `The invalid caller might look something like this: Modular.el("[...]", { __config__: [...] }, [...]);`,
                 "el"],
 
             2: ["Invalid Input",
@@ -30,19 +29,19 @@ const Modular = {
                 "Modular does not know how how to handle this.",
                 "core.getHtml"],
 
-            4: ["Invalid or missing Input",
+            4: ["Invalid or Missing Input",
                 "Unable to scan.",
-                "A value, which is not a [String] was passed into Modular.scan().",
+                "A invalid value was passed into Modular.scan().",
                 "Modular.scan() expects a [String].",
                 "scan"],
 
-            5: ["Missing Input",
+            5: ["Missing TagName",
                 "Unable to create Modular element.",
                 "Missing tag.",
                 "( The tag of a Modular-element is the first attribute of Modular.el() )",
                 "el"],
 
-            6: ["Invalid Input",
+            6: ["Invalid Style",
                 "Unable to convert given value to inline style.",
                 "A value passed into Modular.core.getStyle() could not be converted into inline style.",
                 "Modular.core.getStyle() expects a [String] (already containing inline style), an [Object] (containing valid style) or a [Funtion] (returning an object that contains valid style)",
@@ -57,26 +56,69 @@ const Modular = {
                 "Keep in mind - if the container-element is not a child of the page, you propably won't be able to see much.",
                 "render"],
 
-            8: ["Invalid Input",
+            8: ["Invalid Render-Container",
                 "Unable to render",
                 "Modular.render() recieved an invalid container-element.",
                 "A container-element has to be an html-element or a valid CSS-selector ( [String] ).",
                 "Keep in mind - if the container-element is not a child of the page, you propably won't be able to see much.",
-                "render"]
+                "render"],
+
+            9: ["Unknown Binding-Name",
+                "Unable to set binding.",
+                "Modular.setBinding() recieved an unknown binding-name.",
+                "Bindings are created during render - maybe you should try setting the binding after Modular.render() is called.",
+                `The "mRendered" event might help with timing.`,
+                "setBinding"],
+
+            10: ["Unknown Binding-Name",
+                "Could not find binding.",
+                "Modular.getBinding() recieved an unknown binding-name.",
+                "Bindings are created during render - maybe you should try getting the binding after Modular.render() is called.",
+                `The "mRendered" event might help with timing.`,
+                "getBinding"],
+
+            11: ["Unknown Binding-Name",
+                "Could not find binding.",
+                "Modular.listenBinding() recieved an unknown binding-name.",
+                "Bindings are created during render - maybe you should try listening the binding after Modular.render() is called.",
+                `The "mRendered" event might help with timing.`,
+                "listenBinding"]
         }
+    },
+
+    // Get the value of a binding
+    getBinding(binding) {
+        if (!Modular.data.bindings[binding]) throw Modular.core.err(10);
+        return Modular.data.bindings[binding].value;
+    },
+
+    // Set the value of a binding
+    setBinding(binding, value) {
+        if (!Modular.data.bindings[binding]) throw Modular.core.err(9);
+        Modular.data.bindings[binding].lastValue = Modular.data.bindings[binding].value;
+        Modular.data.bindings[binding].value = value;
+        Modular.data.bindings[binding].elements.map(element => {
+            element.element[element.value] = Modular.data.bindings[binding].value;
+        });
+    },
+
+    // Add a listener to a binding
+    listenBinding(binding, func) {
+        if (!Modular.data.bindings[binding]) throw Modular.core.err(11);
+        Modular.data.bindings[binding].listeners.push(func);
     },
 
     core: {
         // Creates an error-string with modular-format
         err(i) {
-            let args = Modular.data.ERRORS[i];
+            let args = Modular.data.errors[i];
             let type = `[${args[0]}]`;
             args.shift();
 
-            const position = (args.length > 1) ? `\n@ Modular.${args.pop()}()` : "";
+            const position = (args.length > 1) ? `\n@ Modular.${args.pop()}()\n` : "";
             const error = args.map(arg => `\n--> ${arg}\n`).join("");
 
-            return `🚨 (Modular-2): ${type}\n${error}\n${position}\n`;
+            return `🚨 (Modular-2): ${type}\n${error}${position}`;
         },
 
         // Transforms "impure" objects into something modular can work with
@@ -173,12 +215,32 @@ const Modular = {
 
             // Only add the binding logic if there was a binding-object passed in
             if (typeof attributes.__config__.bindings === "object") {
+                attributes.__config__.change = () => {
+                    // Updating all of the element's bindings
+                    Object.entries(attributes.__config__.bindings).map(entry => {
+                        let newVal = attributes.__config__.element[entry[0]];
+                        if (newVal == "true") newVal = true;
+                        else if (newVal == "false") newVal = false;
+
+                        Modular.setBinding(entry[1], newVal);
+                        // Checking if there actually were changes
+                        if (Modular.data.bindings[entry[1]].value !== Modular.data.bindings[entry[1]].lastValue || typeof Modular.data.bindings[entry[1]].value === "object" || typeof Modular.data.bindings[entry[1]].value === "array") {
+                            // Running all listeners
+                            Modular.data.bindings[entry[1]].listeners.map(listener => {
+                                listener(Modular.getBinding(entry[1]))
+                            });
+                        }
+                    });
+                };
+
                 Object.entries(attributes.__config__.bindings).map(entry => {
-                    // Sreating a binding if not already existing
+                    // Creating a binding if the binding-name doesn't exist
                     if (!Modular.data.bindings[entry[1]]) {
                         Modular.data.bindings[entry[1]] = {
-                            elements: [],
-                            value: undefined
+                            elements: [], // The elements bound to the binding
+                            lastValue: undefined,
+                            value: undefined, // The value of the binding
+                            listeners: [] // The functions that will run be run when the binding changes
                         };
                     }
 
@@ -190,39 +252,14 @@ const Modular = {
                     });
                 });
 
-                attributes.__config__.change = () => {
-                    // Updating all of the element's bindings
-                    Object.entries(attributes.__config__.bindings).map(entry => {
-                        Modular.data.bindings[entry[1]].value = attributes.__config__.element[entry[0]];
-                        Modular.data.bindings[entry[1]].elements.map(element => {
-                            switch (Modular.data.bindings[entry[1]].value) {
-                                case "true":
-                                case "on":
-                                    element.element[element.value] = true;
-                                    break;
-
-                                case "false":
-                                case "off":
-                                    element.element[element.value] = false;
-                                    break;                                    
-
-                                default:
-                                    element.element[element.value] = Modular.data.bindings[entry[1]].value;
-                                    break;
-                            }
-                        });
-                    });
-                };
-
                 // Adding all relevant eventlisteners to the before created DOM-element
+                attributes.__config__.element.addEventListener("mouseover", e => attributes.__config__.change(e));
+                attributes.__config__.element.addEventListener("mouseout", e => attributes.__config__.change(e));
                 attributes.__config__.element.addEventListener("click", e => attributes.__config__.change(e));
                 attributes.__config__.element.addEventListener("change", e => attributes.__config__.change(e));
-                attributes.__config__.element.addEventListener("hover", e => attributes.__config__.change(e));
                 attributes.__config__.element.addEventListener("keyup", e => attributes.__config__.change(e));
                 attributes.__config__.element.addEventListener("keydown", e => attributes.__config__.change(e));
                 attributes.__config__.element.addEventListener("scroll", e => attributes.__config__.change(e));
-                attributes.__config__.element.addEventListener("mouseover", e => attributes.__config__.change(e));
-                attributes.__config__.element.addEventListener("mouseout", e => attributes.__config__.change(e));
                 attributes.__config__.element.addEventListener("contextmenu", e => attributes.__config__.change(e));
                 attributes.__config__.change();
             }
@@ -237,7 +274,7 @@ const Modular = {
 
     // Converts a (html) string into a Modular-element
     scan(val) {
-        if (typeof val !== "string") throw new Error(Modular.data.ERRORS[4]);
+        if (typeof val !== "string") throw new Error(Modular.core.err(4));
         let wrapper = document.createElement("div");
         wrapper.innerHTML = val.trim();
 
@@ -251,7 +288,7 @@ const Modular = {
         return res;
     },
 
-    // The entry-point for rednering stuff
+    // The entry-point for rendering stuff
     render(element, _container) {
         window.dispatchEvent(Modular.data.onRender);
         if (!element || !_container) throw new Error(Modular.core.err(7));

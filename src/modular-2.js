@@ -6,7 +6,7 @@ const Modular = {
         bindings: {},
         renderedEvent: new Event("mRendered"),
         onRender: new Event("mOnRender"),
-        ERRORS: {
+        errors: {
             0: ["Info",
                 "You are using the development build of Modular-2. Make sure to use the production build when deploying this app."],
 
@@ -14,7 +14,6 @@ const Modular = {
                 "Unable to create Modular element.",
                 "Invalid attribute.",
                 `The attribute "__config__" is reserved for Modular.`,
-                `The invalid caller might look something like this: Modular.el("[...]", { __config__: [...] }, [...]);`,
                 "el"],
 
             2: ["Invalid Input",
@@ -112,7 +111,7 @@ const Modular = {
     core: {
         // Creates an error-string with modular-format
         err(i) {
-            let args = Modular.data.ERRORS[i];
+            let args = Modular.data.errors[i];
             let type = `[${args[0]}]`;
             args.shift();
 
@@ -275,7 +274,7 @@ const Modular = {
 
     // Converts a (html) string into a Modular-element
     scan(val) {
-        if (typeof val !== "string") throw new Error(Modular.data.ERRORS[4]);
+        if (typeof val !== "string") throw new Error(Modular.core.err(4));
         let wrapper = document.createElement("div");
         wrapper.innerHTML = val.trim();
 
