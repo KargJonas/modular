@@ -1,30 +1,54 @@
-let style = {
-    display: "inline-flex",
-    margin: 0
+const btnStyle = {
+    userSelect: "none",
+    backgroundColor: "#4286f4",
+    border: "none",
+    padding: "5px 15px 3px 15px",
+    borderRadius: "7px",
+    outline: "none",
+    fontSize: "20px",
+    color: "#fff",
+    boxShadow: "0 0 8px #777"
 };
 
-function MyComponent() {
-    return [
-        Modular.el("input", {
-            type: "checkbox",
-            style: style,
-            $bind: {
-                checked: "textboxBinding",
-            }
-        }),
+let showSuccess = false;
 
-        Modular.el("p", {
-            style: style,
-            $bind: {
-                innerHTML: "textboxBinding",
-            }
-        }, "false")
+function Button(text, callback) {
+    return Modular.el("button", {
+        onmouseover() {
+            this.style.boxShadow = "0 0 4px #000";
+        },
+        onmouseout() {
+            this.style.boxShadow = "0 0 8px #777";
+        },
+        onclick: callback,
+        style: btnStyle
+    }, text)
+}
+
+function Success() {
+    return Modular.el("h2", {
+        $bind: {
+            style: "showSuccess"
+        },
+    }, "Success.");
+}
+
+function App() {
+    return [
+        Modular.el("h1", null, "Hello World!"),
+        Button("Click this button for success in life!", () => {
+            showSuccess = !showSuccess;
+            Modular.setBinding("showSuccess", showSuccess ? "display: block" : "display: none");
+        }),
+        Success
     ];
 }
 
 const t = performance.now();
 Modular.render(
-    MyComponent,
+    App,
     document.querySelector("#root"),
 );
 console.log(performance.now() - t);
+
+Modular.setBinding("showSuccess", "display: none");
