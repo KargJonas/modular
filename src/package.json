@@ -5,7 +5,7 @@
     "main": "modular-2.js",
     "scripts": {
         "config": "webpack --config webpack.config.js",
-        "start-dev": "webpack-dev-server",
+        "start-dev": "webpack --watch",
         "build": "webpack dev/modular-2.js"
     },
     "author": "Jonas Karg",
