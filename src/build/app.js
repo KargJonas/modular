@@ -7,7 +7,8 @@ const btnStyle = {
     outline: "none",
     fontSize: "20px",
     color: "#fff",
-    boxShadow: "0 0 8px #777"
+    boxShadow: "0 0 8px #777",
+    margin: "15px"
 };
 
 let showSuccess = false;
@@ -40,6 +41,8 @@ function App() {
             showSuccess = !showSuccess;
             Modular.setBinding("showSuccess", showSuccess ? "display: block" : "display: none");
         }),
+        Button("This is another button.", () => console.log("Hey")),
+        Button("Yet another button.", () => console.log("Hello")),
         Success
     ];
 }

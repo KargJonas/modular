@@ -28,7 +28,6 @@ function scan(val) {
 
     const res = Array.from(wrapper.childNodes).map(node => {
         if (node instanceof Element) {
-            isOnlyText = false;
             return Modular.el(node.tagName, Modular.core.getAttr(node.attributes), Modular.scan(node.innerHTML));
         } else return node.textContent;
     });
