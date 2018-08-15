@@ -268,7 +268,7 @@ Modular.render(
 Every modular element is an object, which contains the attributes of the corresponding DOM-element and a special `__config__` attribute. `__config__` contains the `tagName` and the `content` of the element but also some other stuff such as the type of the Modular-element, the render method, the element's bindings, the DOM-element and the element's render-method itself. (<b>The $bind-attribute will be removed upon render.</b>)
 <hr>
 
-## But why is this useful?
+(## But-why-is-this-useful?)
 Frameworks like Modular-2 allow you to create dynamic website content and to reuse parts of your page (as components) without major modification.<br>
 
 ### Example use-case:
