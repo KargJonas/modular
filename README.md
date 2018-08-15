@@ -11,8 +11,8 @@
 ## Table of Contents
 - [Example](#example)
 - [Error System](#the-error-system)
-- [Modular.el()](#modular-el)
-- [Modular.render()](#modular-render)
+- [Modular.el()](#modular-el())
+- [Modular.render()](#modular-render())
 - [Style](#style)
 - [Bindings](#bindings)
 - [Modular.getBinding()](#Modular.getBinding())
