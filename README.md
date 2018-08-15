@@ -4,21 +4,21 @@
 ## Some neat stuff:
 - A friendly [error system](#The&nbsp;error&nbsp;system) 🚨
 - Only 6.5 KB 💾
-- Fast [rendering](#Modular.render()) ⏱️
+- Fast [rendering](#Modular.render) ⏱️
 - [Data-binding](#bindings) ⛓
 - Intuitive [syntax](#example) 👩🏻‍💻
 
 ## Table of Contents
 - [Example](#example)
 - [Error System](#the-error-system)
-- [Modular.el()](#modularel())
-- [Modular.render()](#modularrender())
+- [Modular.el()](#modularel)
+- [Modular.render()](#modularrender)
 - [Style](#style)
 - [Bindings](#bindings)
-- [Modular.getBinding()](#modulargetbinding())
-- [Modular.setBinding()](#modularsetbinding())
-- [Modular.listenBinding()](#modularlistenbinding())
-- [Modular.scan()](#modularscan())
+- [Modular.getBinding()](#modulargetbinding)
+- [Modular.setBinding()](#modularsetbinding)
+- [Modular.listenBinding()](#modularlistenbinding)
+- [Modular.scan()](#modularscan)
 - [Components](#components)
 - [\_\_config\_\_](#\_\_config\_\_)
 - [Why is this useful?](#but-why-is-this-useful)
@@ -69,7 +69,7 @@ The development-build of modular (modular-2.dev.js) has a friendly error system 
 ![Error](https://github.com/KargJonas/random/blob/master/modular2/error.png)
 <hr>
 
-## Modular.el():
+## Modular.el:
 Returns a `Modular-element`, that can be transformed into a `DOM-element` with `Modular.render()`.
 
 ## Usage:
@@ -109,7 +109,7 @@ let myOtherElement = Modular.el("input", {
 ```
 <hr>
 
-## Modular.render()
+## Modular.render
 Converts a value into a DOM-Element and inserts it into another element.
 
 ## Usage:
@@ -176,7 +176,7 @@ Modular.render(
 ```
 <hr>
 
-## Modular.getBinding()
+## Modular.getBinding
 Allows you to get the current value of a binding.
 ### Example
 ```js
@@ -184,7 +184,7 @@ let myVariable = Modular.getBinding("myFirstBinding");
 ```
 <hr>
 
-## Modular.setBinding()
+## Modular.setBinding
 Allows you to set the current value of a binding.
 ### Example
 ```js
@@ -192,7 +192,7 @@ Modular.setBinding("mySecondBinding", "This is the binding's new content.");
 ```
 <hr>
 
-## Modular.listenBinding()
+## Modular.listenBinding
 Runs the given function every time a change occurs in the specified binding. (You can have as many of these as you want.)
 ### Example
 ```js
@@ -202,7 +202,7 @@ Modular.listenBinding("myOtherBinding", (newValue, event) => {
 ```
 <hr>
 
-## Modular.scan()
+## Modular.scan
 Converts an html-string into an array of Modular-elements. (<b>Comments are handeled as text.</b>)
 
 ### Example
