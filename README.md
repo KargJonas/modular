@@ -3,22 +3,22 @@
 
 ## Some neat stuff:
 - A friendly [error system](#The&nbsp;error&nbsp;system) 🚨
-- Only 6.5 KB
-- Fast [rendering](#Modular.render())
-- [Data-binding](#Bindings)
-- Intuitive [syntax](#Example)
+- Only 6.5 KB 💾
+- Fast [rendering](#Modular.render()) ⏱️
+- [Data-binding](#bindings) ⛓
+- Intuitive [syntax](#example) 👩🏻‍💻
 
 ## Table of Contents
 - [Example](#example)
 - [Error System](#the-error-system)
-- [Modular.el()](#modular-el())
-- [Modular.render()](#modular-render())
+- [Modular.el()](#modularel())
+- [Modular.render()](#modularrender())
 - [Style](#style)
 - [Bindings](#bindings)
-- [Modular.getBinding()](#Modular.getBinding())
-- [Modular.setBinding()](#Modular.setBinding())
-- [Modular.listenBinding()](#Modular.listenBinding())
-- [Modular.scan()](#modular-scan)
+- [Modular.getBinding()](#modulargetbinding())
+- [Modular.setBinding()](#modularsetbinding())
+- [Modular.listenBinding()](#modularlistenbinding())
+- [Modular.scan()](#modularscan())
 - [Components](#components)
 - [\_\_config\_\_](#\_\_config\_\_)
 - [Why is this useful?](#but-why-is-this-useful)
