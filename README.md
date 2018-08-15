@@ -1,5 +1,3 @@
-# !! This documentation is incomplete. !!
-
 ## Modular-2 is a tool for dynamic, component-based UI-generation.<br>
 #### " It's a little (more than a) temlating system. "
 <hr>
