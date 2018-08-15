@@ -31,13 +31,15 @@
 </script>
 ```
 ```
-    []
-    []
-  \\\///
-   \\//
-    ''
+     []
+     []
+   \\\///
+    \\//
+     ''
 ```
 ![Example](https://github.com/KargJonas/random/blob/master/modular2/example.png)
+
+<hr>
 
 ## Modular.el():
 Returns a `Modular-element`, that can be transformed into a `DOM-element` with `Modular.render()`.
@@ -148,7 +150,6 @@ Modular.render(
     "#rootElement"
 );
 ```
-
 <hr>
 
 ## Style
@@ -156,6 +157,7 @@ Modular has some stuff to offer that might help you with dynamic styles:
 - If you want, you can use style-objects. Style objects will be transformed into inline-style, when the element is rendered.
   
 - You can use functions as style. This might seem silly but it makes your code more readable.<br><i>Remember: Style functions must return either a string or an Object.</i>
+<br>
 
 ## Bindings
 Bindings are a way to "tie" an element's properties to a value. You could even tie an element's properties to the ones of another element.<br>
@@ -189,6 +191,7 @@ Modular.render(
     "#myContainerElement" // This in in your HTML
 );
 ```
+<hr>
 
 ## Modular.getBinding()
 Allows you to get the current value of a binding.
@@ -196,6 +199,7 @@ Allows you to get the current value of a binding.
 ```js
 let myVariable = Modular.getBinding("myFirstBinding");
 ```
+<hr>
 
 ## Modular.setBinding()
 Allows you to set the current value of a binding.
@@ -203,6 +207,7 @@ Allows you to set the current value of a binding.
 ```js
 Modular.setBinding("mySecondBinding", "This is the binding's new content.");
 ```
+<hr>
 
 ## Modular.listenBinding()
 Runs the given function every time a change occurs in the specified binding. (You can have as many of these as you want.)
@@ -212,6 +217,7 @@ Modular.listenBinding("myOtherBinding", (newValue, event) => {
     console.log("myOtherBinding just changed to " + newValue);
 });
 ```
+<hr>
 
 ## Modular.scan()
 Converts an html-string into an array of Modular-elements. (<b>Comments are handeled as text.</b>)
@@ -228,6 +234,7 @@ let myModularElement = Modular.scan(`
     </div>
 `);
 ```
+<hr>
 
 ## \_\_config\_\_
 Every modular element is an object, which contains the attributes of the corresponding DOM-element and a special `__config__` attribute. `__config__` contains the `tagName` and the `content` of the element but also some other stuff such as the type of the Modular-element, the render method, the element's bindings, the DOM-element and the element's render-method itself. (<b>The $bind-attribute will be removed upon render.</b>)
