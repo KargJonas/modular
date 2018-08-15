@@ -1,3 +1,5 @@
+# This documentation is uncomplete.
+
 ## Modular-2 is a little tool for dynamic, component-based UI-generation.<br>
 #### " It's a little (more than a) temlating system. "
 <hr>
@@ -9,11 +11,11 @@
 ```js
 Modular.el(TAGNAME, ATTRIBUTES, CONTENT, CONTENT, ...);
 ```
-- <b>TAGNAME</b> <i>(String)</i>: The tag for your HTML-element ( e.g.: `h1`, `div`, `p`, `myCustomTagName`, ... ).
+- <b>TAGNAME</b> <i style="color:#4286f4">(String)</i>: The tag for your HTML-element ( e.g.: `h1`, `div`, `p`, `myCustomTagName`, ... ).
 
 - <b>ATTRIBUTES</b> <i>(Object | Null)</i>: The attributes of the element. Has to be an `object` or `null`. You can use an object for style, it will automatically be transformed into inline style. Or you could just use a string. ( e.g.: `{ id: "test-el", style: { color: "#f00" } }` ).<br>There are some special attributes such as `$bind` or `__config__`. (See: [Bindings](#Bindings) and [__config__](#config)).
 
-- <b>CONTENT</b> <i>(<span style="color:#4782e0">Null</span> | Undefined | String | Number | Array | Object | Function)</i>: The content of your element. Can be a string, number, Modular.el(...), function or an array containing any of the before mentioned. ( `e.g.: ["Hello", Modular.el("Doe"), 9, ["Test1", "Test2"], "Test", MyFunction, myVariableString]` ).
+- <b>CONTENT</b> <i>(Null | Undefined | String | Number | Array | Object | Function)</i>: The content of your element. Can be a string, number, Modular.el(...), function or an array containing any of the before mentioned. ( `e.g.: ["Hello", Modular.el("Doe"), 9, ["Test1", "Test2"], "Test", MyFunction, myVariableString]` ).
 
 ## Example:
 ```js
