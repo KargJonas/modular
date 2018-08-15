@@ -40,4 +40,4 @@ Object.defineProperty(window, "Modular", {
 });
 
 // Development-build warning
-console.warn(Modular.core.err(0));
+if (Modular.data.errors) console.warn(Modular.core.err(0));
