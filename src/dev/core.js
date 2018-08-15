@@ -1,6 +1,6 @@
 // Creates an error-string with modular-format
 function err(i) {
-    if (!Modular.data.errors) return;
+    if (!Modular.data.errors) return "Error";
     let args = Modular.data.errors[i];
     let type = `[${args[0]}]`;
     args.shift();
