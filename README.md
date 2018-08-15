@@ -24,34 +24,7 @@
 - [Why is this useful?](#but-why-is-this-useful)
 
 ### Example:
-```html
-<div id="root"></div>
-<script src="modular-2.js"></script>
-<script>
-
-    let users = ["Bill", "Hopper", "Mark", "Linus"];
-    const userStyle = {
-        borderBottom: "2px solid #333333",
-        paddingRight: "5px",
-        width: "max-content"
-    };
-
-    function User(name) {
-        return Modular.el(
-            "li",
-            { style: userStyle },
-            name
-        );
-    }
-
-    function List() {
-        return users.map(user => User(user));
-    }
-
-    Modular.render(List, "#root");
-
-</script>
-```
+![Example Code](https://github.com/KargJonas/random/blob/master/modular2/example-code.png)
 ```
      []
      []
@@ -59,7 +32,7 @@
     \\//
      ''
 ```
-![Example](https://github.com/KargJonas/random/blob/master/modular2/example.png)
+![Example Output](https://github.com/KargJonas/random/blob/master/modular2/example.png)
 
 <hr>
 
