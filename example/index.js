@@ -1,13 +1,20 @@
-// Here are our users stored
 let users = ["Bill", "Hopper", "Mark", "Linus"];
+let userStyle = {
+    borderBottom: "2px solid #333333",
+    paddingRight: "5px",
+    width: "max-content"
+};
 
-// A regular function that acts as our component
-function MyComponent () {
-    return users.map(user => Modular.el("li", null, user));
+function User(name) {
+    return Modular.el(
+        "li",
+        { style: userStyle },
+        name
+    );
 }
 
-// Rendering everything
-Modular.render(
-    MyComponent,
-    document.querySelector("#root"),
-);
+function List() {
+    return users.map(user => User(user));
+}
+
+Modular.render(List, "#root");

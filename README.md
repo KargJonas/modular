@@ -1,6 +1,43 @@
-## Modular-2 is a tool for dynamic, component-based UI-generation.<br>
-#### " It's a little (more than a) temlating system. "
-<hr>
+## Modular-2 is a tool for dynamic, component-based Page-generation.<br>
+### <b>"A little (more than a) temlating system."</b>
+
+### An example:
+```html
+<div id="root"></div>
+<script src="modular-2.min.js"></script>
+<script>
+
+    let users = ["Bill", "Hopper", "Mark", "Linus"];
+    const userStyle = {
+        borderBottom: "2px solid #333333",
+        paddingRight: "5px",
+        width: "max-content"
+    };
+
+    function User(name) {
+        return Modular.el(
+            "li",
+            { style: userStyle },
+            name
+        );
+    }
+
+    function List() {
+        return users.map(user => User(user));
+    }
+
+    Modular.render(List, "#root");
+
+</script>
+```
+```
+    []
+    []
+  \\\///
+   \\//
+    ''
+```
+![Example](https://github.com/KargJonas/random/blob/master/modular2/example.png)
 
 ## Modular.el():
 Returns a `Modular-element`, that can be transformed into a `DOM-element` with `Modular.render()`.
@@ -10,7 +47,7 @@ Returns a `Modular-element`, that can be transformed into a `DOM-element` with `
 Modular.el(TAGNAME, ATTRIBUTES, CONTENT, CONTENT, ...);
 ```
 
-- <b>TAGNAME</b> <i>(String)</i>:<br>The element's `tagName`.<br>( e.g.: `h1`, `div`, `p`, `myCustomTagName`, ... ).
+- <b>TAGNAME</b> <i>(String)</i>:<br>The element's `tagName`.<br>( e.g.: `h1`, `div`, `p`, `mycustomtagname`, ... ).
 
 - <b>ATTRIBUTES</b> <i>(Object | Null)</i>:<br>The attributes of the element. <br>There are some special attributes such as [style](#Style), [$bind](#Bindings) and [\_\_config\_\_](#__config__).
 
@@ -123,7 +160,7 @@ Modular has some stuff to offer that might help you with dynamic styles:
 ## Bindings
 Bindings are a way to "tie" an element's properties to a value. You could even tie an element's properties to the ones of another element.<br>
 
-To define a Modular-element's bindings, you can use the `$bind`-attribute. The attribute's value must be an object. Each key in the object correnponds to a property of the DOM-element, that is created from Modular.el() and each value is the name of a binding, the property will be bound to.<br>
+To define a Modular-element's bindings, you can use the `$bind`-attribute. The attribute's value must be an object. Each key in the object correnponds to a property of the DOM-element, that is created from Modular.el() and each value is the name of a binding, the property will be bound to. (<b>The $bind-attribute will be removed upon render, so your DOM-elements stay nice and clean.</b>)<br>
 
 Every time any changes occur in either in the binding or any of the elements, everything is updated (<b>But not re-rendered!</b>).
 ### Example
@@ -176,8 +213,24 @@ Modular.listenBinding("myOtherBinding", (newValue, event) => {
 });
 ```
 
+## Modular.scan()
+Converts an html-string into an array of Modular-elements. (<b>Comments are handeled as text.</b>)
+
+### Example
+```js
+let myModularElement = Modular.scan(`
+    <h1 id="test-header">This is a test-header</h1>
+    <p>Test</p>
+    Text-node
+
+    <div>
+        Test
+    </div>
+`);
+```
+
 ## \_\_config\_\_
-Every modular element is an object, which contains all attributes of the corresponding DOM-element and a spaecial `__config__` attribute. `__config__` contains the `tagName` and the `content` of the element but also some other stuff such as the type of the Modular-element, the render method, the element's bindings, the DOM-element and the element's render-method itself.
+Every modular element is an object, which contains the attributes of the corresponding DOM-element and a special `__config__` attribute. `__config__` contains the `tagName` and the `content` of the element but also some other stuff such as the type of the Modular-element, the render method, the element's bindings, the DOM-element and the element's render-method itself. (<b>The $bind-attribute will be removed upon render.</b>)
 
 ### But why is this useful?
 This allows you to create dynamic website content and to reuse parts of your page (components) without major modification.<br>
