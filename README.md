@@ -21,7 +21,7 @@
 - [Modular.scan()](#Modular.scan())
 - [Components](#Components)
 - [\_\_config\_\_](#\_\_config\_\_)
-- [But why is this useful](#But&nbsp;why&nbsp;is&nbsp;this&nbsp;useful)
+- [Why is this useful?](But-why-is-this-useful?)
 
 ### Example:
 ```html
@@ -270,5 +270,6 @@ Every modular element is an object, which contains the attributes of the corresp
 
 ## But why is this useful?
 Frameworks like Modular-2 allow you to create dynamic website content and to reuse parts of your page (as components) without major modification.<br>
+
 ### Example use-case:
 You have an array of 1000 users. You want to display every user in a list and you want to be able to delete and add users in that list dynamically. Also you want that all premium users have a shared tag.
