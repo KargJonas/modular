@@ -21,7 +21,7 @@
 - [Modular.scan()](#Modular.scan())
 - [Components](#Components)
 - [\_\_config\_\_](#\_\_config\_\_)
-- [Why is this useful?](But-why-is-this-useful?)
+- [Why is this useful?](#But-why-is-this-useful?)
 
 ### Example:
 ```html
