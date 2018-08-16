@@ -1,6 +1,6 @@
 import { err, getAttr, getHtml, getStyle, makeEl } from "./core.js";
 import { getBinding, setBinding, listenBinding, scan, render } from "./methods";
-import errors from "./errors";
+// import errors from "./errors";
 import el from "./el";
 
 const Modular = {
@@ -9,7 +9,7 @@ const Modular = {
         bindings: {},
         renderedEvent: new Event("prerender"),
         onRender: new Event("postrender"),
-        errors: errors || undefined
+        errors: errors
     },
 
     // The core
