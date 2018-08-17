@@ -1,7 +1,8 @@
 import { err, getAttr, getHtml, getStyle, makeEl } from "./core.js";
 import { getBinding, setBinding, listenBinding, scan, render } from "./methods";
-// import errors from "./errors";
+import errors from "./errors";
 import el from "./el";
+import router from "./router";
 
 const Modular = {
     // Events, bindings and error-messages
@@ -27,7 +28,8 @@ const Modular = {
     listenBinding: listenBinding,
     scan: scan,
     el: el,
-    render: render
+    render: render,
+    router: router
 };
 
 // Making Modular a global constant

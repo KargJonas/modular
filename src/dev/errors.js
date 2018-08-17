@@ -74,7 +74,16 @@ const errors = {
         "Modular.listenBinding() recieved an unknown binding-name.",
         "Bindings are created during render - maybe you should try listening the binding after Modular.render() is called.",
         `The "mRendered" event might help with timing.`,
-        "listenBinding"]
+        "listenBinding"],
+
+    12: ["Invalid routes",
+        "Modular.router.setup() recieved an invalid input.",
+        "Modular.router.setup() expects an object ( structured like this: { PATH: RENDER_CONTENT, ... } ) in ",
+        "router.setRoute"],
+
+    13: ["Missing input",
+        "Modular.router.setup() is missing a parent element.",
+        "router.setup"]
 }
 
 export default errors;
