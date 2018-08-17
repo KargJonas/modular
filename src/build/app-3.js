@@ -30,6 +30,9 @@ const mainPage = Modular.scan(`
     <h1 style='font-size:50px;text-align:center'>
         Hey!
     </h1>
+    <h2 style='text-align:center'>
+        This is a page.
+    </h2>
 `);
 
 Modular.router.routes = {
@@ -47,4 +50,6 @@ window.addEventListener("newroute", () => {
 
 Modular.router.init();
 
-document.addEventListener("click", () => Modular.router.navigate("/test"));
+document.addEventListener("click", () => {
+    Modular.router.navigate("/test");
+});

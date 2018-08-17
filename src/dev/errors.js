@@ -76,14 +76,11 @@ const errors = {
         `The "mRendered" event might help with timing.`,
         "listenBinding"],
 
-    12: ["Invalid routes",
-        "Modular.router.setup() recieved an invalid input.",
-        "Modular.router.setup() expects an object ( structured like this: { PATH: RENDER_CONTENT, ... } ) in ",
-        "router.setRoute"],
-
-    13: ["Missing input",
-        "Modular.router.setup() is missing a parent element.",
-        "router.setup"]
+    12: ["Invalid configuration",
+        "Could not get route.",
+        "Modular.router.routes must be an object or null.",
+        `The routes-object should be structured like this this:\nModular.router.routes = {\n  "path/of/the/page": MyElement,\n  "path/of/the/other/page": MyOtherElement\n}`,
+        "router.routeChange"]
 }
 
 export default errors;

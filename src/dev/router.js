@@ -15,6 +15,7 @@ const router = {
 
     routeChange() {
         if (!router.routes) return;
+        if (router.routes.constructor !== Object) throw Modular.core.err(12);
     
         const route = router.getRoute(window.location.pathname);
         const entries = Object.entries(router.routes);
