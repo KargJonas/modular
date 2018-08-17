@@ -7,6 +7,7 @@
 - Fast [rendering](#Modular.render) ⏱️
 - [Data-binding](#bindings) ⛓
 - Intuitive [syntax](#example) 👩🏻‍💻
+- A rigid [router](#the-router) 📡
 
 ## Table of Contents
 - [Example](#example)
@@ -20,6 +21,8 @@
 - [Modular.listenBinding()](#modularlistenbinding)
 - [Modular.scan()](#modularscan)
 - [Components](#components)
+- [The router](#the-router)
+- [Modular.router.navigate()](#modularrouternavigate)
 - [\_\_config\_\_](#\_\_config\_\_)
 - [Why is this useful?](#but-why-is-this-useful)
 
@@ -109,6 +112,14 @@ let myOtherElement = Modular.el("input", {
 ```
 <hr>
 
+## Events
+| Event-Name   | Info                                    |
+| ------------ | --------------------------------------- |
+| `prerender`  | Called before render                    |
+| `postrender` | Called after render                     |
+| `newroute`   | Called after a route-change has occured |
+<hr>
+
 ## Modular.render
 Converts a value into a DOM-Element and inserts it into another element.
 
@@ -193,7 +204,7 @@ Modular.setBinding("mySecondBinding", "This is the binding's new content.");
 <hr>
 
 ## Modular.listenBinding
-Runs the given function every time a change occurs in the specified binding. (You can have as many of these as you want.)
+Runs the provided function every time a change occurs in the specified binding. (You can have as many of these as you want.)
 ### Example
 ```js
 Modular.listenBinding("myOtherBinding", (newValue, event) => {
@@ -261,6 +272,94 @@ Modular.render(
     ],
     "#rootElement"
 );
+```
+<hr>
+
+## The router
+Modular-2 has a minimalist router built in. There are four major steps to implement it into your page.
+### 1.) Configure the routes
+#### Usage:
+```js
+Modular.router.routes = {
+    "PAGE_PATH": PAGE_VALUE
+};
+```
+
+#### Example:
+```js
+Modular.router.routes = {
+    "path/to/your/page": Value,
+    "users/**": OtherValue,
+    "**": YetAnotherValue
+};
+```
+
+The routes are checked one after the other. When a perfect match to `window.location.pathname` is found, `Modular.router.element` is set to the corresponding element and the `newroute`-event is dispatched (See: [Events](#events)). (Router-Elements could be anything. It's up to you what you want to do with them. See [Modular.render](#modularrender)). `**` matches anything.
+
+### 2.) Respond to route-changes
+Inorder to change the content on the page, you need to set up a system, that renders the desired content, when a change in the route occurs.
+#### Example.
+```js
+window.addEventListener("newroute", () => {
+    Modular.render(
+        Modular.router.page,
+        "#root"
+    );
+});
+```
+
+#### Notice:
+If you have elements, that you want to show up on any page, it would be very annoying to add your topbar-element to each value in `Modular.router.routes`. An easier way would be to add the element directly the element in `Modular.render`:
+```js
+window.addEventListener("newroute", () => {
+    Modular.render(
+        [
+            Topbar, // The topbar
+            Modular.router.page // The page
+        ],
+        "#root"
+    );
+});
+```
+
+### 3.) Server
+If you use the router to build a singlepage-app, you have to tell the server to ignore all request for subpages and only respons with your main file. (`index.html`)
+
+#### Apache:
+If you are using Apache, you can just create a file inside your website's folder called "`.htaccess`" containig the following code.
+
+```apache
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    RewriteRule ^ index.html [L]
+</IfModule>
+```
+
+This snippet uses the Apache's RewriteEngine, you can enable it using these commands:
+
+```bash
+sudo a2enmod rewrite
+sudo service apache2 restart
+```
+
+### 4.) Navigate
+You can use [Modular.router.navigate](#modularrouternavigate) to switch to the desired url. This can be implemented into a link.
+
+<hr>
+
+## Modular.router.navigate
+Navigates the [router](#the-router) to the provided url.
+### Usage
+```js
+Modular.router.navigate(PATH);
+```
+
+### Example
+```js
+Modular.router.navigate("/users/premium/john_doe");
 ```
 <hr>
 
