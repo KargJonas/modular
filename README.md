@@ -28,7 +28,7 @@
 <hr>
 
 # The error system
-The development-build of modular (modular-2.dev.js) has a friendly error system built-in. The most common errors are hand-written and contain easy-to-understand information on how to fix the the issue. An error might look like this:
+The development-build of modular (modular-2.dev.js) has a friendly error system built-in. The most common errors are hand-written and contain easy-to-understand information on how to fix your issue. An error might look like this:
 
 ![Error](https://github.com/KargJonas/random/blob/master/modular2/error.png)
 <hr>
