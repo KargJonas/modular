@@ -27,42 +27,7 @@
 - [Why is this useful?](#but-why-is-this-useful)
 
 ### Example:
-```html
-<div id="root"></div>
-<script src="modular-2.js"></script>
-<script>
-
-    let users = ["Bill", "Hopper", "Mark", "Linus"];
-    const userStyle = {
-        borderBottom: "2px solid #333333",
-        paddingRight: "5px",
-        width: "max-content"
-    };
-
-    function User(name) {
-        return Modular.el(
-            "li",
-            { style: userStyle },
-            name
-        );
-    }
-
-    function List() {
-        return users.map(user => User(user));
-    }
-
-    Modular.render(List, "#root");
-
-</script>
-```
-```
-     []
-     []
-   \\\///
-    \\//
-     ''
-```
-![Example](https://github.com/KargJonas/random/blob/master/modular2/example.png)
+![Basic-Example](https://github.com/KargJonas/random/blob/master/modular2/basic.gif)
 
 <hr>
 
@@ -87,26 +52,7 @@ Modular.el(TAGNAME, ATTRIBUTES, CONTENT, CONTENT, ...);
 - <b>CONTENT</b> <i>[ String | Number | Array | Object (Modlar-element) | Function | Element (html) | Null ]</i>:<br>The content of the element. You can use basically anything as content.
 
 ## Example:
-```js
-let myElement = Modular.el(
-    "div",
-    { style: "background-color: #9ff" },
-    "Hello World"
-);
-```
-or
-```js
-let myOtherElement = Modular.el("input", {
-    type: "text",
-    style: {
-        outline: "none",
-        border: "none",
-        backgroundColor: "#bfbfc9"
-    }
-});
-```
-
-![example](https://github.com/KargJonas/random/blob/master/modular2/el.gif)
+![El-Example](https://github.com/KargJonas/random/blob/master/modular2/el.gif)
 <hr>
 
 ## Events
@@ -148,6 +94,9 @@ Modular has some stuff to offer that might help you with dynamic styles:
 - If you want, you can use style-objects. Style objects will be transformed into inline-style, when the element is rendered.
   
 - You can use functions as style. This might seem silly but it makes your code more readable.<br><i>Remember: Style functions must return either a string or an Object.</i>
+
+### Example:
+![Style-Example](https://github.com/KargJonas/random/blob/master/modular2/style.gif)
 <hr>
 
 ## Bindings
@@ -157,31 +106,7 @@ To define a Modular-element's bindings, you can use the `$bind`-attribute. The a
 
 Every time any changes occur in either in the binding or any of the elements, everything is updated (<b>But not re-rendered!</b>).
 ### Example
-```js
-// An input, that is bound to "myBinding"
-let myInput = Modular.el("input", {
-    type: "text",
-    style: "outline: none",
-
-    // This is where the magic happens
-    $bind: {
-        value: "myBinding"
-    }
-});
-
-// A paragraph that is also bound to "myBinding"
-let myParagraph = Modular.el("p", {
-    $bind: {
-        innerHTML: "myBinding"
-    }
-}, "This is just a placeholder!");
-
-// Rendering everything
-Modular.render(
-    [myInput, myParagraph],
-    "#myContainerElement" // This in in your HTML
-);
-```
+![Binding-Example](https://github.com/KargJonas/random/blob/master/modular2/bindings-2.gif)
 <hr>
 
 ## Modular.getBinding
@@ -270,6 +195,8 @@ Modular.render(
     "#rootElement"
 );
 ```
+
+![Coponents-and-Arrays-Example](https://github.com/KargJonas/random/blob/master/modular2/components-and-arrays.gif)
 <hr>
 
 ## The router
