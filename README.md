@@ -88,13 +88,11 @@ Modular.el(TAGNAME, ATTRIBUTES, CONTENT, CONTENT, ...);
 
 ## Example:
 ```js
-let myElement = Modular.el("div",
+let myElement = Modular.el(
+    "div",
     { style: "background-color: #9ff" },
     "Hello World"
 );
-
-// Turns into this when rendered:
-// <div style="background-color: #9ff">Hello World</div>
 ```
 or
 ```js
@@ -106,10 +104,9 @@ let myOtherElement = Modular.el("input", {
         backgroundColor: "#bfbfc9"
     }
 });
-
-// Turns into this when rendered:
-// <input type="text" style="outline:none;border:none;background-color:#bfbfc9">
 ```
+
+![example](https://github.com/KargJonas/random/blob/master/modular2/el.gif)
 <hr>
 
 ## Events
