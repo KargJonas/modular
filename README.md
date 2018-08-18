@@ -7,7 +7,7 @@
 - Fast [rendering](#Modular.render) ⏱️
 - [Data-binding](#bindings) ⛓
 - Intuitive [syntax](#example) 👩🏻‍💻
-- A rigid [router](#the-router) 📡
+- A solid [router](#the-router) 📡
 
 ## Table of Contents
 - [Error System](#the-error-system)
@@ -89,16 +89,37 @@ Modular has some stuff to offer that might help you with dynamic style:
 <hr>
 
 # Bindings
-Bindings are a way to "tie" an element's properties to a value. You could even tie an element's properties to the ones of another element.<br>
+Bindings are a way to "tie" an element's properties to a value. You could even tie an element's properties to the ones of another element.
 
-To define a Modular-element's bindings, you can use the `$bind`-attribute. The attribute's value must be an object. Each key in the object correnponds to a property of the DOM-element, that is created from Modular.el() and each value is the name of a binding the property will be bound to. (<b>The $bind-attribute will be removed upon render, so your DOM-elements stay nice and clean.</b>)<br>
+To define a Modular-element's bindings, you can use the `$bind`-attribute. The attribute's value must be an object. Each key in the object correnponds to a property of the DOM-element, that is created from Modular.el() and each value is the name of a binding the property will be bound to. (<b>The $bind-attribute will be removed upon render, so your DOM-elements stay nice and clean.</b>)
 
 If any changes occur in either in the binding or any of the elements, all elements that are bound to the binding are updated (<b>But not re-rendered!</b>).
 
 ### Note
 If an element's property is added to a binding, the binding is updated. This means that the binding's value will always be the one of the last element that was added.
 
+### Usage
+```js
+$bind: {
+    ELEMENT_PROPERTY: BINDING_NAME,
+    OTHER_ELEMENT_PROPERTY: OTHER_BINDING_NAME,
+    ...
+}
+```
+
 ### Example
+```js
+Modular.el(
+    "h1",
+    {
+        $bind: {
+            innerHTML: "myTextBinding",
+            contenteditable: "myBooleanBinding"
+        }
+    },
+    "Username: John"
+);
+```
 
 ![Binding-Example](https://github.com/KargJonas/random/blob/master/modular2/bindings-2.gif)
 <hr>
@@ -147,11 +168,9 @@ let myModularElement = Modular.scan(`
 <hr>
 
 # Components:
-A component is a compact, self-containing unit. 
+A component is a compact, self-containing unit. One could be a function, another one an element, an array of functions, strings, numbers, an array of arrays, ... whatever. It's your choice.
 
-A component could be a function, an element, an array of functions, strings, arrays, ... whatever. It's your choice.
-
-A good practice however would be to put major parts of your page into functions. For example the topbar:
+A good practice however would be to put major parts of your page into functions. For example the topbar.
 
 ```js
 // This is your topbar
