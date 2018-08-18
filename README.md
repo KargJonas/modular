@@ -1,9 +1,9 @@
-## Modular-2 is a tool for dynamic, component-based Page-generation.<br>
+## Modular-2 is a tool for dynamic, component-based page-generation.<br>
 ### <b>"A little (more than a) temlating system."</b>
 
 ## Some neat stuff:
 - A friendly [error system](#The&nbsp;error&nbsp;system) 🚨
-- Only 6.5 KB 💾
+- Only 7.3 KB 💾
 - Fast [rendering](#Modular.render) ⏱️
 - [Data-binding](#bindings) ⛓
 - Intuitive [syntax](#example) 👩🏻‍💻
