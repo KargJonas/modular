@@ -31,16 +31,16 @@
 
 <hr>
 
-## The error system
+# The error system
 The development-build of modular (modular-2.dev.js) has a friendly error system built in. An error might look like this:
 
 ![Error](https://github.com/KargJonas/random/blob/master/modular2/error.png)
 <hr>
 
-## Modular.el:
+# Modular.el:
 Returns a `Modular-element`, that can be transformed into a `DOM-element` with `Modular.render()`.
 
-## Usage:
+### Usage:
 ```js
 Modular.el(TAGNAME, ATTRIBUTES, CONTENT, CONTENT, ...);
 ```
@@ -51,11 +51,11 @@ Modular.el(TAGNAME, ATTRIBUTES, CONTENT, CONTENT, ...);
 
 - <b>CONTENT</b> <i>[ String | Number | Array | Object (Modlar-element) | Function | Element (html) | Null ]</i>:<br>The content of the element. You can use basically anything as content.
 
-## Example:
+### Example:
 ![El-Example](https://github.com/KargJonas/random/blob/master/modular2/el.gif)
 <hr>
 
-## Events
+# Events
 | Event-Name   | Info                                    |
 | ------------ | --------------------------------------- |
 | `prerender`  | Called before render                    |
@@ -63,17 +63,17 @@ Modular.el(TAGNAME, ATTRIBUTES, CONTENT, CONTENT, ...);
 | `newroute`   | Called after a route-change has occured |
 <hr>
 
-## Modular.render
+# Modular.render
 Converts a value into a DOM-Element and inserts it into another element.
 
-## Usage:
+### Usage:
 ```js
 Modular.render(VALUE, ELEMENT/SELECTOR);
 ```
 - VALUE <i>[ String | Number | Array | Object (Modlar-element) | Function | Element (html) | Null ]</i>:<br>The element that will be "rendered"
 - ELEMENT/SELECTOR <i>(Element | String)</i>: The parent/container-element or it's selector.
 
-## Example:
+### Example:
 ```js
 Modular.render(
     Modular.el("h1", null, "Test"),
@@ -89,7 +89,7 @@ Modular.render(
 ```
 <hr>
 
-## Style
+# Style
 Modular has some stuff to offer that might help you with dynamic styles:
 - If you want, you can use style-objects. Style objects will be transformed into inline-style, when the element is rendered.
   
@@ -99,7 +99,7 @@ Modular has some stuff to offer that might help you with dynamic styles:
 ![Style-Example](https://github.com/KargJonas/random/blob/master/modular2/style.gif)
 <hr>
 
-## Bindings
+# Bindings
 Bindings are a way to "tie" an element's properties to a value. You could even tie an element's properties to the ones of another element.<br>
 
 To define a Modular-element's bindings, you can use the `$bind`-attribute. The attribute's value must be an object. Each key in the object correnponds to a property of the DOM-element, that is created from Modular.el() and each value is the name of a binding, the property will be bound to. (<b>The $bind-attribute will be removed upon render, so your DOM-elements stay nice and clean.</b>)<br>
@@ -109,7 +109,7 @@ Every time any changes occur in either in the binding or any of the elements, ev
 ![Binding-Example](https://github.com/KargJonas/random/blob/master/modular2/bindings-2.gif)
 <hr>
 
-## Modular.getBinding
+# Modular.getBinding
 Allows you to get the current value of a binding.
 ### Example
 ```js
@@ -125,7 +125,7 @@ Modular.setBinding("mySecondBinding", "This is the binding's new content.");
 ```
 <hr>
 
-## Modular.listenBinding
+# Modular.listenBinding
 Runs the provided function every time a change occurs in the specified binding. (You can have as many of these as you want.)
 ### Example
 ```js
@@ -135,7 +135,7 @@ Modular.listenBinding("myOtherBinding", (newValue, event) => {
 ```
 <hr>
 
-## Modular.scan
+# Modular.scan
 Converts an html-string into an array of Modular-elements. (<b>Comments are handeled as text.</b>)
 
 ### Example
@@ -152,7 +152,7 @@ let myModularElement = Modular.scan(`
 ```
 <hr>
 
-## Components:
+# Components:
 A component could be a method, an element, an array of methods, strings, arrays, ... whatever. It's your choice.
 
 A good practice however would be to put major parts of your page into functions. For example, you could put the topbar of a page into a Function:
@@ -199,7 +199,7 @@ Modular.render(
 ![Coponents-and-Arrays-Example](https://github.com/KargJonas/random/blob/master/modular2/components-and-arrays.gif)
 <hr>
 
-## The router
+# The router
 Modular-2 has a minimalist router built in. There are four major steps to implement it into your page.
 ### 1.) Configure the routes
 #### Usage:
@@ -274,7 +274,7 @@ You can use [Modular.router.navigate](#modularrouternavigate) to switch to the d
 
 <hr>
 
-## Modular.router.navigate
+# Modular.router.navigate
 Navigates the [router](#the-router) to the provided url.
 ### Usage
 ```js
@@ -287,11 +287,11 @@ Modular.router.navigate("/users/premium/john_doe");
 ```
 <hr>
 
-## \_\_config\_\_
+# \_\_config\_\_
 Every modular element is an object, which contains the attributes of the corresponding DOM-element and a special `__config__` attribute. `__config__` contains the `tagName` and the `content` of the element but also some other stuff such as the type of the Modular-element, the render method, the element's bindings, the DOM-element and the element's render-method itself. (<b>The $bind-attribute will be removed upon render.</b>)
 <hr>
 
-## But why is this useful?
+# But why is this useful?
 Frameworks like Modular-2 allow you to create dynamic website content and to reuse parts of your page (as components) without major modification.<br>
 
 ### Example use-case:
