@@ -6,7 +6,15 @@ function getBinding(binding) {
 
 // Set the value of a binding
 function setBinding(binding, value) {
-    if (!Modular.data.bindings[binding]) throw Modular.core.err(9);
+    if (!Modular.data.bindings[binding]) {
+        Modular.data.bindings[binding] = {
+            elements: [],
+            lastValue: undefined,
+            value: undefined,
+            listeners: []
+        };
+    }
+    
     Modular.data.bindings[binding].lastValue = Modular.data.bindings[binding].value;
     Modular.data.bindings[binding].value = value;
     Modular.data.bindings[binding].elements.map(element => {

@@ -1,3 +1,18 @@
+// Router link
+function rl(path, text, style) {
+    return Modular.el(
+        "a",
+        {
+            href: "#",
+            style: style,
+            onclick() {
+                Modular.router.navigate(path);
+            }
+        },
+        text
+    );
+}
+
 function NotFound() {
     return Modular.el("div", {
         style: {
@@ -43,7 +58,7 @@ Modular.router.routes = {
 
 window.addEventListener("newroute", () => {
     Modular.render(
-        Modular.router.page,
+        [Modular.router.page, rl("/src/build/test", "this is a test-link")],
         "#root"
     );
 });

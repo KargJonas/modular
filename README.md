@@ -10,10 +10,12 @@
 - A solid [router](#the-router) 📡
 
 ## Table of Contents
+- [Installation](#installation)
 - [Error System](#the-error-system)
 - [Events](#events)
 - [Modular.el()](#modularel)
 - [Modular.render()](#modularrender)
+- [className](#classname)
 - [Style](#style)
 - [Bindings](#bindings)
 - [Modular.getBinding()](#modulargetbinding)
@@ -25,6 +27,16 @@
 - [Modular.router.navigate()](#modularrouternavigate)
 - [\_\_config\_\_](#\_\_config\_\_)
 - [Why is this useful?](#but-why-is-this-useful)
+<hr>
+
+# Installation
+When you are using modlar un a regular website, you can just include it with a `<script>`-tag.
+
+### Example:
+```html
+<script src="path/to/modular-2.js"></script>
+```
+
 <hr>
 
 # The error system
@@ -75,6 +87,20 @@ Modular.render(VALUE, ELEMENT_OR_SELECTOR);
 
 ### Example:
 ![Basic-Example](https://github.com/KargJonas/random/blob/master/modular2/basic.gif)
+<hr>
+
+# className
+Because of the way modular handles elements attibutes it is necessary to use `className` instead of `class` in [Modular.el()](#modularel).
+
+### Example
+```js
+Modular.el(
+    "h1",
+    { className: "myVeryAwesomeClass" },#
+    "Hello World"
+);
+```
+
 <hr>
 
 # Style

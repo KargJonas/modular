@@ -50,7 +50,7 @@ function getStyle(val) {
         style = wrapper.getAttribute("style");
     }
 
-    if (typeof style !== "string") throw new Error(Modular.core.err(6));
+    if (typeof style !== "string" && Modular.data.errors) console.warn(Modular.core.err(6));
     return style;
 }
 
