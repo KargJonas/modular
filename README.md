@@ -39,6 +39,7 @@ When you are using modular on a regular website, you can just include it with a 
 
 ### RawGit links:
 https://rawgit.com/KargJonas/modular2/master/dist/modular-2.dev.js
+
 https://rawgit.com/KargJonas/modular2/master/dist/modular-2.js
 
 <hr>
