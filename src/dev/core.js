@@ -8,7 +8,7 @@ function err(i) {
     const position = (args.length > 1) ? `\n@ Modular.${args.pop()}()\n` : "";
     const error = args.map(arg => `\n--> ${arg}\n`).join("");
 
-    return `🚨 (Modular-2): ${type}\n${error}${position}`;
+    return `🚨 (Modular): ${type}\n${error}${position}`;
 }
 
 // Transforms "impure" objects into something modular can work with

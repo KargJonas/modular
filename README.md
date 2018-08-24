@@ -1,4 +1,4 @@
-## Modular-2 is a tool for dynamic, component-based page-generation.<br>
+## Modular is a tool for dynamic, component-based page-generation.<br>
 ### <b>"A little (more than a) temlating system."</b>
 
 ## Some neat stuff:
@@ -34,20 +34,20 @@ When you are using modular on a regular website, you can just include it with a 
 
 ### Example:
 ```html
-<script src="path/to/modular-2.js"></script>
+<script src="path/to/modular.js"></script>
 ```
 
 ### RawGit links:
-https://rawgit.com/KargJonas/modular2/master/dist/modular-2.dev.js
+https://rawgit.com/KargJonas/modular/master/dist/modular.dev.js
 
-https://rawgit.com/KargJonas/modular2/master/dist/modular-2.js
+https://rawgit.com/KargJonas/modular/master/dist/modular.js
 
 <hr>
 
 # The error system
-The development-build of modular (modular-2.dev.js) has a friendly error system built-in. The most common errors are hand-written and contain easy-to-understand information on how to fix your issue. An error might look like this:
+The development-build of modular (modular.dev.js) has a friendly error system built-in. The most common errors are hand-written and contain easy-to-understand information on how to fix your issue. An error might look like this:
 
-![Error](https://github.com/KargJonas/random/blob/master/modular2/error.png)
+![Error](https://github.com/KargJonas/random/blob/master/modular/error.png)
 <hr>
 
 # Events
@@ -77,7 +77,7 @@ Modular.el(TAGNAME, ATTRIBUTES, CONTENT, CONTENT, ...);
 #### Only TAGNAME is required.
 
 ### Example:
-![El-Example](https://github.com/KargJonas/random/blob/master/modular2/el.gif)
+![El-Example](https://github.com/KargJonas/random/blob/master/modular/el.gif)
 <hr>
 
 # Modular.render
@@ -91,11 +91,11 @@ Modular.render(VALUE, ELEMENT_OR_SELECTOR);
 - ELEMENT_OR_SELECTOR <i>(Element | String)</i>: The parent element or it's selector.
 
 ### Example:
-![Basic-Example](https://github.com/KargJonas/random/blob/master/modular2/basic.gif)
+![Basic-Example](https://github.com/KargJonas/random/blob/master/modular/basic.gif)
 <hr>
 
 # className
-Because of the way Modular-2 handles elements attibutes it is necessary to use `className` instead of `class` in [Modular.el()](#modularel).
+Because of the way Modular handles elements attibutes it is necessary to use `className` instead of `class` in [Modular.el()](#modularel).
 
 ### Example
 ```js
@@ -116,7 +116,7 @@ Modular has some stuff to offer that might help you with dynamic style:
 - You can use functions as style. This might seem silly but it makes your code more readable.<br><i>Remember: Style functions must return either a String or an Object.</i>
 
 ### Example:
-![Style-Example](https://github.com/KargJonas/random/blob/master/modular2/style.gif)
+![Style-Example](https://github.com/KargJonas/random/blob/master/modular/style.gif)
 <hr>
 
 # Bindings
@@ -152,7 +152,7 @@ Modular.el(
 );
 ```
 
-![Binding-Example](https://github.com/KargJonas/random/blob/master/modular2/bindings-2.gif)
+![Binding-Example](https://github.com/KargJonas/random/blob/master/modular/bindings-2.gif)
 <hr>
 
 # Modular.getBinding
@@ -243,11 +243,11 @@ Modular.render(
 );
 ```
 
-![Coponents-and-Arrays-Example](https://github.com/KargJonas/random/blob/master/modular2/components-and-arrays.gif)
+![Coponents-and-Arrays-Example](https://github.com/KargJonas/random/blob/master/modular/components-and-arrays.gif)
 <hr>
 
 # The router
-Modular-2 has a minimalist router built-in. There are four major steps to implement it into your page.
+Modular has a minimalist router built-in. There are four major steps to implement it into your page.
 
 ### 1.) Configure the routes
 #### Usage:
@@ -340,7 +340,7 @@ Every modular element is an object, which contains the attributes of the corresp
 <hr>
 
 # But why is this useful?
-Frameworks like Modular-2 allow you to create dynamic website content and to reuse parts of your page (as components) without major modification.<br>
+Frameworks like Modular allow you to create dynamic website content and to reuse parts of your page (as components) without major modification.<br>
 
 ### Example use-case:
 You have an array of 1000 users. You want to display every user in a list and you want to be able to delete and add users in that list dynamically. Also you want that all premium users have a shared tag.

@@ -1,6 +1,6 @@
 const errors = {
     0: ["Info",
-        "You are using the development build of Modular-2. Make sure to use the production build when deploying this app."],
+        "You are using the development build of Modular. Make sure to use the production build when deploying this app."],
 
     1: ["Invalid Attribute",
         "Unable to create Modular element.",

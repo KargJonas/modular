@@ -1,23 +1,23 @@
 {
-    "name": "modular.2",
+    "name": "Modular",
     "version": "1.0.0",
-    "description": "Modular 2",
-    "main": "modular-2.js",
+    "description": "Modular",
+    "main": "modular.js",
     "scripts": {
         "config": "webpack --config webpack.config.js",
         "start-dev": "webpack --watch",
-        "build": "webpack dev/modular-2.js"
+        "build": "webpack dev/modular.js"
     },
     "author": "Jonas Karg",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/KargJonas/modular2.git"
+        "url": "git+https://github.com/KargJonas/modular.git"
     },
     "bugs": {
-        "url": "https://github.com/KargJonas/modular2/issues"
+        "url": "https://github.com/KargJonas/modular/issues"
     },
-    "homepage": "https://github.com/KargJonas/modular2#readme",
+    "homepage": "https://github.com/KargJonas/modular#readme",
     "devDependencies": {},
     "dependencies": {
         "babel-core": "^6.26.3",
