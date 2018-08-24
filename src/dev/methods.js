@@ -1,9 +1,3 @@
-// Get the value of a binding
-function getBinding(binding) {
-    if (!Modular.data.bindings[binding]) throw Modular.core.err(10);
-    return Modular.data.bindings[binding].value;
-}
-
 // Set the value of a binding
 function setBinding(binding, value) {
     if (!Modular.data.bindings[binding]) {
@@ -22,9 +16,15 @@ function setBinding(binding, value) {
     });
 }
 
+// Get the value of a binding
+function getBinding(binding) {
+    if (!Modular.data.bindings[binding]) return undefined;
+    return Modular.data.bindings[binding].value;
+}
+
 // Add a listener to a binding
 function listenBinding(binding, func) {
-    if (!Modular.data.bindings[binding]) throw Modular.core.err(11);
+    if (!Modular.data.bindings[binding]) Modular.setBinding(binding, undefined);
     Modular.data.bindings[binding].listeners.push(func);
 }
 

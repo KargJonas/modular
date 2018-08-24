@@ -1,7 +1,8 @@
 const path = require("path");
 
 module.exports = {
-    mode: "development",
+    // mode: "development",
+    mode: "production",
     entry: path.resolve(__dirname, "dev/modular-2.js"),
     output: {
         path: path.resolve(__dirname, "build"),

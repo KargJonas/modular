@@ -30,12 +30,16 @@
 <hr>
 
 # Installation
-When you are using modlar un a regular website, you can just include it with a `<script>`-tag.
+When you are using modular on a regular website, you can just include it with a `<script>`-tag.
 
 ### Example:
 ```html
 <script src="path/to/modular-2.js"></script>
 ```
+
+### RawGit links:
+https://rawgit.com/KargJonas/modular2/master/dist/modular-2.dev.js
+https://rawgit.com/KargJonas/modular2/master/dist/modular-2.js
 
 <hr>
 
@@ -90,7 +94,7 @@ Modular.render(VALUE, ELEMENT_OR_SELECTOR);
 <hr>
 
 # className
-Because of the way modular handles elements attibutes it is necessary to use `className` instead of `class` in [Modular.el()](#modularel).
+Because of the way Modular-2 handles elements attibutes it is necessary to use `className` instead of `class` in [Modular.el()](#modularel).
 
 ### Example
 ```js
