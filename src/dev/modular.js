@@ -4,6 +4,9 @@ import errors from "./errors";
 import el from "./el";
 import router from "./router";
 
+// Prefabs
+import { MdlBtn } from "./prefabs/basic";
+
 const Modular = {
     // Events, bindings and error-messages
     data: {
@@ -31,6 +34,10 @@ const Modular = {
     render: render,
     router: router
 };
+
+Object.assign(Modular, {
+    btn: MdlBtn
+});
 
 // Making Modular a global constant
 Object.defineProperty(window, "Modular", {
