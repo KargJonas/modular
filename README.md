@@ -38,14 +38,10 @@ When you are using modular on a regular website, you can just include it with a 
 ```
 
 ### RawGit links:
-https://rawgit.com/KargJonas/modular/master/dist/modular.dev.js
-
+https://rawgit.com/KargJonas/modular/master/dist/modular.dev.js<br>
 https://rawgit.com/KargJonas/modular/master/dist/modular.js
 
-<hr>
-
-https://rawgit.com/KargJonas/modular/master/dist/modular.babel.dev.js
-
+https://rawgit.com/KargJonas/modular/master/dist/modular.babel.dev.js<br>
 https://rawgit.com/KargJonas/modular/master/dist/modular.babel.js
 
 <hr>
