@@ -44,6 +44,12 @@ https://rawgit.com/KargJonas/modular/master/dist/modular.js
 
 <hr>
 
+https://rawgit.com/KargJonas/modular/master/dist/modular.babel.dev.js
+
+https://rawgit.com/KargJonas/modular/master/dist/modular.babel.js
+
+<hr>
+
 # The error system
 The development-build of modular (modular.dev.js) has a friendly error system built-in. The most common errors are hand-written and contain easy-to-understand information on how to fix your issue. An error might look like this:
 
