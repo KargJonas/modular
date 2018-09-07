@@ -41,9 +41,10 @@ function getHtml(value) {
 }
 
 // Transforms different types of style into inline
-function getStyle(val) {
+function getInlineStyle(val) {
     let style = val;
     if (typeof style === "function") style = style();
+
     if (typeof style === "object") {
         const wrapper = document.createElement("div");
         Object.assign(wrapper.style, style);
@@ -58,7 +59,7 @@ function getStyle(val) {
 function makeEl(tagName, attributes, content) {
     const element = document.createElement(tagName);
 
-    if (attributes && attributes.style) attributes.style = Modular.core.getStyle(attributes.style);
+    if (attributes && attributes.style) attributes.style = Modular.core.getInlineStyle(attributes.style);
     Object.assign(element, attributes);
 
     if (content) element.appendChild(content);
@@ -69,6 +70,6 @@ export {
     err,
     getAttr,
     getHtml,
-    getStyle,
+    getInlineStyle,
     makeEl
 };

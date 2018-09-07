@@ -1,6 +1,3 @@
-const myEl = Modular.btn(
-    "Test",
-    () => cosole.log("Test")
-);
+const myEl = Modular.el("h1", {}, "Hello!");
 
-Modular.render(myEl , "#root");
+Modular.render(myEl, "#root");

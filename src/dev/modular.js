@@ -1,11 +1,8 @@
-import { err, getAttr, getHtml, getStyle, makeEl } from "./core.js";
+import { err, getAttr, getHtml, getInlineStyle, makeEl } from "./core.js";
 import { getBinding, setBinding, listenBinding, scan, render } from "./methods";
 import errors from "./errors";
 import el from "./el";
 import router from "./router";
-
-// Prefabs
-import { MdlBtn } from "./prefabs/basic";
 
 const Modular = {
     // Events, bindings and error-messages
@@ -21,7 +18,7 @@ const Modular = {
         err: err,
         getAttr: getAttr,
         getHtml: getHtml,
-        getStyle: getStyle,
+        getInlineStyle: getInlineStyle,
         makeEl: makeEl
     },
 
@@ -34,10 +31,6 @@ const Modular = {
     render: render,
     router: router
 };
-
-Object.assign(Modular, {
-    btn: MdlBtn
-});
 
 // Making Modular a global constant
 Object.defineProperty(window, "Modular", {
