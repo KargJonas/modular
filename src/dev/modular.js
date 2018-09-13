@@ -8,8 +8,8 @@ const Modular = {
     // Events, bindings and error-messages
     data: {
         bindings: {},
-        renderedEvent: new Event("prerender"),
-        onRender: new Event("postrender"),
+        preRender: new Event("prerender"),
+        postRender: new Event("postrender"),
         errors: errors
     },
 

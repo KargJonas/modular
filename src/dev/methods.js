@@ -45,7 +45,7 @@ function scan(val) {
 
 // The entry-point for rendering stuff
 function render(element, _container) {
-    window.dispatchEvent(Modular.data.onRender);
+    window.dispatchEvent(Modular.data.preRender);
     if (!element || !_container) throw new Error(Modular.core.err(7));
     let container;
 
@@ -56,7 +56,7 @@ function render(element, _container) {
     if (!(container instanceof Element)) throw Modular.core.err(8);
     container.innerHTML = "";
     container.appendChild(Modular.core.getHtml(element));
-    window.dispatchEvent(Modular.data.renderedEvent);
+    window.dispatchEvent(Modular.data.postRender);
 }
 
 export {
