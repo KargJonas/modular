@@ -1,6 +1,6 @@
 {
     "name": "modular-ui-dev",
-    "version": "1.3.0",
+    "version": "1.6.1",
     "description": "A tool for dynamic, component-based page-generation.",
     "main": "./dev/modular.js",
     "scripts": {
