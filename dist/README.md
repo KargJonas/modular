@@ -30,11 +30,16 @@
 <hr>
 
 # Installation
-When you are using modular on a regular website, you can just include it with a `<script>`-tag.
+If you are using modular on a regular website, you can just include it with a `<script>`-tag.
 
 ### Example:
 ```html
 <script src="path/to/modular.js"></script>
+```
+
+### npm:
+```
+npm i modular-ui
 ```
 
 ### RawGit links:

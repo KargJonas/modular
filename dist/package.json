@@ -1,0 +1,22 @@
+{
+  "name": "modular-ui",
+  "version": "1.3.0",
+  "description": "A tool for dynamic, component-based page-generation.",
+  "main": "modular.dev.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KargJonas/modular.git"
+  },
+  "keywords": [
+    "UI"
+  ],
+  "author": "Jonas Karg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KargJonas/modular/issues"
+  },
+  "homepage": "https://github.com/KargJonas/modular#readme"
+}
