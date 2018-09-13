@@ -45,7 +45,10 @@ function scan(val) {
 
 // The entry-point for rendering stuff
 function render(element, _container) {
+    Modular.data.tempStyle = "";
+    Modular.data.elCount = 0;
     window.dispatchEvent(Modular.data.preRender);
+    
     if (!element || !_container) throw new Error(Modular.core.err(7));
     let container;
 
@@ -54,8 +57,14 @@ function render(element, _container) {
     } else container = _container;
 
     if (!(container instanceof Element)) throw Modular.core.err(8);
+
     container.innerHTML = "";
     container.appendChild(Modular.core.getHtml(element));
+
+    const styleEl = document.createElement("style");
+    styleEl.innerHTML = Modular.data.tempStyle;
+    document.head.appendChild(styleEl);
+
     window.dispatchEvent(Modular.data.postRender);
 }
 

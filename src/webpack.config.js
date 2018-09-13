@@ -7,16 +7,5 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "test"),
         filename: "modular.bundle.js"
-    },
-    // module: {
-    //     rules: [
-    //         {
-    //             test: /\.js?$/,
-    //             loader: "babel-loader",
-    //             options: {
-    //                 presets: ["env"]
-    //             }
-    //         }
-    //     ]
-    // }
+    }
 };

@@ -34,8 +34,8 @@ const errors = {
         "el"],
 
     6: ["Invalid Style",
-        "Unable to convert given value to inline style.",
-        "A value passed into Modular.core.getStyle() could not be converted into inline style.",
+        "Unable to convert given value to CSS.",
+        "An invalid value passed into Modular.core.getStyle().",
         "Modular.core.getStyle() expects a [String] (already containing inline style), an [Object] (containing valid style) or a [Funtion] (returning an object that contains valid style)",
         "Empty or invalid styles should be avoided.",
         "core.getStyle"],

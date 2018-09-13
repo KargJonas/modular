@@ -46,9 +46,6 @@ npm i modular-ui
 https://rawgit.com/KargJonas/modular/master/dist/modular.dev.js<br>
 https://rawgit.com/KargJonas/modular/master/dist/modular.js
 
-https://rawgit.com/KargJonas/modular/master/dist/modular.babel.dev.js<br>
-https://rawgit.com/KargJonas/modular/master/dist/modular.babel.js
-
 <hr>
 
 # The error system

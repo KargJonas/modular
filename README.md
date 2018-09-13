@@ -3,11 +3,11 @@
 
 ## Some neat stuff:
 - A friendly [error system](#The&nbsp;error&nbsp;system) 🚨
-- Only 7.3 KB 💾
 - Fast [rendering](#Modular.render) ⏱️
 - [Data-binding](#bindings) ⛓
 - Intuitive [syntax](#example) 👩🏻‍💻
 - A solid [router](#the-router) 📡
+- Awesome [style](#style)-helpers 🌼
 
 ## Table of Contents
 - [Installation](#installation)
@@ -45,9 +45,6 @@ npm i modular-ui
 ### RawGit links:
 https://rawgit.com/KargJonas/modular/master/dist/modular.dev.js<br>
 https://rawgit.com/KargJonas/modular/master/dist/modular.js
-
-https://rawgit.com/KargJonas/modular/master/dist/modular.babel.dev.js<br>
-https://rawgit.com/KargJonas/modular/master/dist/modular.babel.js
 
 <hr>
 
@@ -118,13 +115,53 @@ Modular.el(
 # Style
 Modular has some stuff to offer that might help you with dynamic style:
 
-- If you want, you can use style-objects. Style objects will be transformed into inline-style, when the element is rendered.
-  
-- You can use functions as style. This might seem silly but it makes your code more readable.<br><i>Remember: Style functions must return either a String or an Object.</i>
+- If you want, you can use style-objects. Style objects will be transformed into global style, when the element is rendered.
 
-### Example:
+- These style-objects can either containin style specifically for the current element or entire css rules, which style any of the element's children.
+
+- Modular makes it easy to add pseudo-classes to your style.
+  
+- You can use functions as style. This might seem silly but it makes your code more readable and evaluates the returned object every time the elment is rendered.<br><i>Remember: Style functions must return either a String or an Object.</i>
+
+### Example 1:
 ![Style-Example](https://github.com/KargJonas/random/blob/master/modular/style.gif)
 <hr>
+
+### Example 2:
+```js
+const style = {
+    color: "green",
+
+    ":hover": {
+        color: "red"
+    }
+};
+
+Modular.el(
+    "h1",
+    { style: style },
+    "This is a test"
+);
+```
+
+### Example 3:
+```js
+const style = {
+    "h1:hover": {
+        color: "red"
+    }
+};
+
+Modular.el(
+    "div",
+    { style: style },
+    Modular.el(
+        "h1",
+        null,
+        "This is a test"
+    )
+);
+```
 
 # Bindings
 Bindings are a way to "tie" an element's properties to a value. You could even tie an element's properties to the ones of another element.

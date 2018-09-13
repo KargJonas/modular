@@ -1,4 +1,4 @@
-import { err, getAttr, getHtml, getInlineStyle, makeEl } from "./core.js";
+import { err, getAttr, getHtml, getStyle, makeEl } from "./core.js";
 import { getBinding, setBinding, listenBinding, scan, render } from "./methods";
 import errors from "./errors";
 import el from "./el";
@@ -10,7 +10,9 @@ const Modular = {
         bindings: {},
         preRender: new Event("prerender"),
         postRender: new Event("postrender"),
-        errors: errors
+        errors: errors,
+        tempStyle: "",
+        elCount: 0
     },
 
     // The core
@@ -18,7 +20,7 @@ const Modular = {
         err: err,
         getAttr: getAttr,
         getHtml: getHtml,
-        getInlineStyle: getInlineStyle,
+        getStyle: getStyle,
         makeEl: makeEl
     },
 
