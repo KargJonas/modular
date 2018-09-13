@@ -1,5 +1,5 @@
 ## Modular is a tool for dynamic, component-based page-generation.<br>
-### <b>"A little (more than a) temlating system."</b>
+### <b>"A little (more than a) templating system."</b>
 
 ## Some neat stuff:
 - A friendly [error system](#The&nbsp;error&nbsp;system) 🚨
