@@ -1,19 +1,12 @@
 import { err, getAttr, getHtml, getStyle, makeEl } from "./core.js";
 import { getBinding, setBinding, listenBinding, scan, render } from "./methods";
-import errors from "./errors";
+import { data } from "./data";
 import el from "./el";
 import router from "./router";
 
 const Modular = {
     // Events, bindings and error-messages
-    data: {
-        bindings: {},
-        preRender: new Event("prerender"),
-        postRender: new Event("postrender"),
-        errors: errors,
-        tempStyle: "",
-        elCount: 0
-    },
+    data: data,
 
     // The core
     core: {

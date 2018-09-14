@@ -1,3 +1,7 @@
+import { data } from "./data";
+import { err, makeEl, getHtml } from "./core";
+import { setBinding, getBinding } from "./methods";
+
 // Creates a modular-element
 function el() {
     // Getting data.
@@ -8,8 +12,8 @@ function el() {
     if (args.length === 1) args = args[0];
 
     // Checking if all mandatory tags are availabile
-    if (typeof tag !== "string") throw new Error(Modular.core.err(5));
-    if (attributes.__config__ !== undefined) throw Error(Modular.core.err(1));
+    if (typeof tag !== "string") throw new Error(err(5));
+    if (attributes.__config__ !== undefined) throw Error(err(1));
 
     // Setting up the configuration
     attributes.__config__ = {
@@ -29,10 +33,10 @@ function el() {
         delete cleanAttr.$bind;
 
         // Creating a DOM-element
-        attributes.__config__.element = Modular.core.makeEl(
+        attributes.__config__.element = makeEl(
             attributes.__config__.tag,
             cleanAttr,
-            Modular.core.getHtml(attributes.__config__.content)
+            getHtml(attributes.__config__.content)
         );
 
         // Only add the binding logic if there was a binding-object passed in
@@ -44,12 +48,12 @@ function el() {
                     if (newVal == "true") newVal = true;
                     else if (newVal == "false") newVal = false;
 
-                    Modular.setBinding(entry[1], newVal);
+                    setBinding(entry[1], newVal);
                     // Checking if there actually were changes
-                    if (Modular.data.bindings[entry[1]].value !== Modular.data.bindings[entry[1]].lastValue || typeof Modular.data.bindings[entry[1]].value === "object" || typeof Modular.data.bindings[entry[1]].value === "array") {
+                    if (data.bindings[entry[1]].value !== data.bindings[entry[1]].lastValue || typeof data.bindings[entry[1]].value === "object" || typeof data.bindings[entry[1]].value === "array") {
                         // Running all listeners
-                        Modular.data.bindings[entry[1]].listeners.map(listener => {
-                            listener(Modular.getBinding(entry[1]))
+                        data.bindings[entry[1]].listeners.map(listener => {
+                            listener(getBinding(entry[1]))
                         });
                     }
                 });
@@ -57,8 +61,8 @@ function el() {
 
             Object.entries(attributes.__config__.bindings).map(entry => {
                 // Creating a binding if the binding-name doesn't exist
-                if (!Modular.data.bindings[entry[1]]) {
-                    Modular.data.bindings[entry[1]] = {
+                if (!data.bindings[entry[1]]) {
+                    data.bindings[entry[1]] = {
                         elements: [], // The elements bound to the binding
                         lastValue: undefined,
                         value: undefined, // The value of the binding
@@ -68,7 +72,7 @@ function el() {
 
                 // Adding a reference of the current element to the binding
                 // so that we can update it's propertys when a change occurs.
-                Modular.data.bindings[entry[1]].elements.push({
+                data.bindings[entry[1]].elements.push({
                     element: attributes.__config__.element, // The element
                     value: entry[0] // The attribute that has to change
                 });

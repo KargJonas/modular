@@ -1,11 +1,13 @@
+import { data } from "./data";
+
 // Creates an error-string with modular-format
 function err(i) {
-    if (!Modular.data.errors) return "Error";
-    let args = Modular.data.errors[i];
+    if (!data.errors) return "Error";
+    let args = data.errors[i];
     let type = `[${args[0]}]`;
     args.shift();
 
-    const position = (args.length > 1) ? `\n@ Modular.${args.pop()}()\n` : "";
+    const position = (args.length > 1) ? `\n@ ${args.pop()}()\n` : "";
     const error = args.map(arg => `\n--> ${arg}\n`).join("");
 
     return `🚨 (Modular): ${type}\n${error}${position}`;
@@ -27,17 +29,17 @@ function getHtml(value) {
     value = value || "";
 
     if (value instanceof Element) return value;
-    else if (value.constructor === Function) return Modular.core.getHtml(value());
+    else if (value.constructor === Function) return getHtml(value());
     else if (value.constructor === Array) {
-        if (!value.length) return Modular.core.getHtml("");
+        if (!value.length) return getHtml("");
         const el = document.createElement("div");
-        value.map(arrEl => el.appendChild(Modular.core.getHtml(arrEl)));
+        value.map(arrEl => el.appendChild(getHtml(arrEl)));
         return el;
     } else if (value.constructor === String || value.constructor === Number) return document.createTextNode(value);
     else if (value.constructor === Object) {
-        if (value.__config__ && value.__config__.type !== "modular-element") throw Modular.core.err(2);
+        if (value.__config__ && value.__config__.type !== "modular-element") throw err(2);
         return value.__config__.render();
-    } else throw Modular.core.err(3);
+    } else throw err(3);
 }
 
 // Transforms a style object into style that only styles only a single element
@@ -65,7 +67,7 @@ function getStyle(val, id) {
         const rules = Object.entries(style);
 
         if (!rules.length) {
-            console.warn(Modular.core.err(6));
+            console.warn(err(6));
             return "";
         }
 
@@ -74,7 +76,7 @@ function getStyle(val, id) {
             style = "";
 
             if (rules.length === 0) {
-                console.warn(Modular.core.err(6));
+                console.warn(err(6));
                 return;
             }
 
@@ -86,7 +88,7 @@ function getStyle(val, id) {
         } else style = makeStyle(style, id);
     }
 
-    if (typeof style !== "string") console.warn(Modular.core.err(6));
+    if (typeof style !== "string") console.warn(err(6));
     return style;
 }
 
@@ -95,13 +97,13 @@ function makeEl(tagName, attributes, content) {
     const element = document.createElement(tagName);
 
     if (attributes && attributes.style) {
-        Modular.data.elCount++;
-        Modular.data.tempStyle += Modular.core.getStyle(attributes.style, Modular.data.elCount);
+        data.elCount++;
+        data.tempStyle += getStyle(attributes.style, data.elCount);
         delete attributes.style;
     }
 
     Object.assign(element, attributes);
-    element.setAttribute("data-modular-id", Modular.data.elCount);
+    element.setAttribute("data-modular-id", data.elCount);
 
     if (content) element.appendChild(content);
     return element;
