@@ -1,6 +1,6 @@
 {
   "name": "modular-ui",
-  "version": "1.6.1",
+  "version": "1.6.7",
   "description": "A tool for dynamic, component-based page-generation.",
   "main": "modular.dev.js",
   "scripts": {
@@ -11,7 +11,9 @@
     "url": "git+https://github.com/KargJonas/modular.git"
   },
   "keywords": [
-    "UI"
+    "UI",
+    "Components",
+    "Modular"
   ],
   "author": "Jonas Karg",
   "license": "MIT",

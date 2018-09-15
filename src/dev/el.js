@@ -59,6 +59,7 @@ function el() {
                 });
             };
 
+            // Mapping through all of the element's bindings
             Object.entries(attributes.__config__.bindings).map(entry => {
                 // Creating a binding if the binding-name doesn't exist
                 if (!data.bindings[entry[1]]) {
@@ -85,7 +86,6 @@ function el() {
             attributes.__config__.element.addEventListener("change", e => attributes.__config__.change(e));
             attributes.__config__.element.addEventListener("keyup", e => attributes.__config__.change(e));
             attributes.__config__.element.addEventListener("keydown", e => attributes.__config__.change(e));
-            attributes.__config__.element.addEventListener("scroll", e => attributes.__config__.change(e));
             attributes.__config__.element.addEventListener("contextmenu", e => attributes.__config__.change(e));
             attributes.__config__.change();
         }

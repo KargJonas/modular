@@ -2,8 +2,8 @@
 ### <b>"A little (more than a) templating system."</b>
 
 ## Some neat stuff:
-- A friendly [error system](#The&nbsp;error&nbsp;system) 🚨
-- Fast [rendering](#Modular.render) ⏱️
+- Friendly [errors](#errors) 🚨
+- Fast [rendering](#modular.render) ⏱️
 - [Data-binding](#bindings) ⛓
 - Intuitive [syntax](#example) 👩🏻‍💻
 - A solid [router](#the-router) 📡
@@ -48,7 +48,7 @@ https://rawgit.com/KargJonas/modular/master/dist/modular.js
 
 <hr>
 
-# The error system
+# Errors
 The development-build of modular (modular.dev.js) has a friendly error system built-in. The most common errors are hand-written and contain easy-to-understand information on how to fix your issue. An error might look like this:
 
 ![Error](https://github.com/KargJonas/random/blob/master/modular/error.png)
@@ -121,9 +121,15 @@ Modular has some stuff to offer that might help you with dynamic style:
   
 - You can use functions as style. This might seem silly but it makes your code more readable and evaluates the returned object every time the element is rendered.<br><i>Remember: Style functions must return either a String or an Object.</i>
 
+### Note
+If the provided style is of type string, inline-stlye is expexted. The style will be scoped to the the element itself:
+
+```js
+const myStringStyle = "color: red; font-family: monospace;";
+```
+
 ### Example 1:
 ![Style-Example](https://github.com/KargJonas/random/blob/master/modular/style.gif)
-<hr>
 
 ### Example 2:
 ```js
@@ -160,6 +166,7 @@ Modular.el(
     )
 );
 ```
+<hr>
 
 # Bindings
 Bindings are a way to "tie" an element's properties to a value. You could even tie an element's properties to the ones of another element.

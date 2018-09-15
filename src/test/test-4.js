@@ -1,4 +1,12 @@
-const style = "color: red";
+const style = {
+    "h1": {
+        color: "red"
+    },
+
+    "h1:hover": {
+        color: "green"
+    }
+};
 
 const myEl = Modular.el(
     "div",
