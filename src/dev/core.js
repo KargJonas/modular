@@ -49,7 +49,7 @@ function makeStyle(obj, id) {
     let pseudos = [];
 
     declarations.map(declaration => {
-        if (declaration[0][0] === ":" && id !== undefined) {
+        if (/:.*/.test(declaration[0]) && id !== undefined) {
             pseudos.push(`[data-modular-id="${id}"]${declaration[0]}{${makeStyle(declaration[1])}}`);
         } else style += `${declaration[0]}:${declaration[1]};`
     });
@@ -62,8 +62,12 @@ function makeStyle(obj, id) {
 function getStyle(val, id) {
     let style = val;
 
-    if (typeof style === "function") style = style();
-    if (typeof style === "object") {
+    if (style.constructor === String) {
+        return `[data-modular-id="${id}"]{${style}}`;
+    }
+
+    if (style instanceof Function) style = style();
+    if (style instanceof Object) {
         const rules = Object.entries(style);
 
         if (!rules.length) {
@@ -72,7 +76,7 @@ function getStyle(val, id) {
         }
 
         // If style-object contains css rules ("css-rules"):
-        if (typeof rules[0][1] === "object") {
+        if (rules[0][1] instanceof Object) {
             style = "";
 
             if (rules.length === 0) {
@@ -83,13 +87,13 @@ function getStyle(val, id) {
             rules.map(rule => {
                 style += `[data-modular-id="${id}"]>${rule[0]}{${makeStyle(rule[1])}}`;
             });
-
-            // If no sub-selectors/rules detected, apply the style directly to the element:
+        
         } else style = makeStyle(style, id);
     }
 
-    if (typeof style !== "string") console.warn(err(6));
-    return style;
+    if (style.constructor === String) return style;
+    console.warn(err(6));
+    return;
 }
 
 // Creates DOM-elements

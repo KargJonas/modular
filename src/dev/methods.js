@@ -33,7 +33,7 @@ function listenBinding(binding, func) {
 
 // Converts a (html) string into a Modular-element
 function scan(val) {
-    if (typeof val !== "string") throw new Error(err(4));
+    if (val.constructor !== String) throw new Error(err(4));
     let wrapper = document.createElement("div");
     wrapper.innerHTML = val.trim();
 
@@ -55,7 +55,7 @@ function render(element, _container) {
     if (!element || !_container) throw new Error(err(7));
     let container;
 
-    if (typeof _container === "string") {
+    if (_container.constructor === String) {
         container = document.querySelector(_container);
     } else container = _container;
 

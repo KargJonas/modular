@@ -40,7 +40,7 @@ function el() {
         );
 
         // Only add the binding logic if there was a binding-object passed in
-        if (typeof attributes.__config__.bindings === "object") {
+        if (attributes.__config__.bindings instanceof Object) {
             attributes.__config__.change = () => {
                 // Updating all of the element's bindings
                 Object.entries(attributes.__config__.bindings).map(entry => {
@@ -50,7 +50,7 @@ function el() {
 
                     setBinding(entry[1], newVal);
                     // Checking if there actually were changes
-                    if (data.bindings[entry[1]].value !== data.bindings[entry[1]].lastValue || typeof data.bindings[entry[1]].value === "object" || typeof data.bindings[entry[1]].value === "array") {
+                    if (data.bindings[entry[1]].value !== data.bindings[entry[1]].lastValue || data.bindings[entry[1]].value instanceof Object || data.bindings[entry[1]].value instanceof Array) {
                         // Running all listeners
                         data.bindings[entry[1]].listeners.map(listener => {
                             listener(getBinding(entry[1]))
