@@ -1,54 +1,66 @@
 import { err } from "./core";
 
 const router = {
-    newRouteEvent: new Event( "newroute" ),
-    routes: undefined,
-    page: undefined,
+  // Event for route changes
+  newRouteEvent: new Event( "newroute" ),
 
-    getRoute( _path ) {
-        let path = _path;
-        path = path.replace( /(^\/+|\/+$)/g, "" );
-        path = path.split( "/" );
+  // Configuration
+  routes: undefined,
 
-        return path;
-    },
+  // The rendered page
+  page: undefined,
 
-    routeChange() {
-        if ( !router.routes ) return;
-        if ( router.routes.constructor !== Object ) throw err( 9 );
+  // Transforming a path-string into an array
+  getRoute( _path ) {
+    let path = _path;
 
-        const route = router.getRoute( window.location.pathname );
-        const entries = Object.entries( router.routes );
+    path = path.replace( /(^\/+|\/+$)/g, "" );
+    path = path.split( "/" );
 
-        for ( let i = 0; i < entries.length; i++ ) {
-            const entryRoute = router.getRoute( entries[i][0] );
-            let match = true;
+    return path;
+  },
 
-            for ( let a = 0; a < entryRoute.length; a++ ) {
-                if ( route[a] === undefined || ( entryRoute[a] !== "**" && entryRoute[i] !== route[i] ) ) {
-                    match = false;
-                    break;
-                }
-            }
+  // Updating the page-content according to the routes-object
+  routeChange() {
 
-            if ( match ) {
-                router.page = entries[i][1];
-                window.dispatchEvent( router.newRouteEvent );
-                return;
-            }
+    // Validating the routes object
+    if ( !router.routes ) return;
+    if ( router.routes.constructor !== Object ) throw err( 9 );
+
+    const route = router.getRoute( window.location.pathname );
+    const entries = Object.entries( router.routes );
+
+    for ( let i = 0; i < entries.length; i++ ) {
+      const entryRoute = router.getRoute( entries[i][0] );
+      let match = true;
+
+      for ( let a = 0; a < entryRoute.length; a++ ) {
+        if ( route[a] === undefined || ( entryRoute[a] !== "**" && entryRoute[i] !== route[i] ) ) {
+          match = false;
+          break;
         }
+      }
 
-    },
-
-    init() {
-        window.addEventListener( "popstate", router.routeChange );
-        router.routeChange();
-    },
-
-    navigate( path ) {
-        window.history.pushState( null, path, path );
-        router.routeChange();
+      if ( match ) {
+        router.page = entries[i][1];
+        window.dispatchEvent( router.newRouteEvent );
+        return;
+      }
     }
+
+  },
+
+  // Initializing the router
+  init() {
+    window.addEventListener( "popstate", router.routeChange );
+    router.routeChange();
+  },
+
+  // Navigate to a route
+  navigate( path ) {
+    window.history.pushState( null, path, path );
+    router.routeChange();
+  }
 };
 
 // Initial route change in main file

@@ -16,7 +16,7 @@ const data = {
   tempStyle: "",
 
   // A counter used to generate element-IDs
-  elCount: 0
+  tempElCount: 0
 };
 
 export { data };

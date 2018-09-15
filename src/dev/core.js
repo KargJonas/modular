@@ -152,9 +152,9 @@ function makeEl( tagName, attributes, content ) {
 
   // Generate global style if style found
   if ( attributes && attributes.style ) {
-    data.elCount++;
-    data.tempStyle += getStyle( attributes.style, data.elCount );
-    attributes["data-modular-id"] = data.elCount;
+    data.tempElCount++;
+    data.tempStyle += getStyle( attributes.style, data.tempElCount );
+    attributes["data-modular-id"] = data.tempElCount;
 
     delete attributes.style;
   }
