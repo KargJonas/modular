@@ -128,12 +128,14 @@ If the provided style is of type string, inline-stlye is expexted. The style wil
 const myStringStyle = "color: red; font-family: monospace;";
 ```
 
-### Example 1:
+### Example:
 ![Style-Example](https://github.com/KargJonas/random/blob/master/modular/style.gif)
 
-### Example 2:
+### Some more cases:
 ```js
-const style = {
+const styleOne = "color: red; font-family: monospace;";
+
+const styleTwo = {
     color: "green",
 
     ":hover": {
@@ -141,30 +143,15 @@ const style = {
     }
 };
 
-Modular.el(
-    "h1",
-    { style: style },
-    "This is a test"
-);
-```
+const styleThree = {
+    "h1": {
+        color: "green"
+    },
 
-### Example 3:
-```js
-const style = {
     "h1:hover": {
         color: "red"
     }
 };
-
-Modular.el(
-    "div",
-    { style: style },
-    Modular.el(
-        "h1",
-        null,
-        "This is a test"
-    )
-);
 ```
 <hr>
 

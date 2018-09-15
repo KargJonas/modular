@@ -28,12 +28,12 @@ const Modular = {
 };
 
 // Making Modular a global constant
-Object.defineProperty(window, "Modular", {
+Object.defineProperty( window, "Modular", {
     value: Modular,
     writable: false,
     enumerable: true,
     configurable: false
-});
+} );
 
 // Development-build warning
-if (Modular.data.errors) console.warn(Modular.core.err(0));
+if ( Modular.data.errors ) console.warn( Modular.core.err( 0 ) );

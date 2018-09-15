@@ -1,7 +1,7 @@
 const myEl = Modular.el(
-    "div",
-    null,
-    ["Test", "Test"]
+  "div",
+  { style: "color:red" },
+  "Test"
 );
 
-Modular.render(myEl, "#root");
+Modular.render( myEl, "#root" );
