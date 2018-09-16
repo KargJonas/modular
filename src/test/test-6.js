@@ -4,4 +4,18 @@ const myEl = Modular.el(
   "Test"
 );
 
-Modular.render( myEl, "#root" );
+Modular.router.routes = {
+  "/test": "Hey",
+  "/src/test/index.html": myEl
+};
+
+window.addEventListener( "click", () => Modular.router.navigate( "/test" ) );
+
+window.addEventListener( "newroute", () => {
+  Modular.render(
+    Modular.router.page,
+    "#root"
+  );
+} );
+
+Modular.router.init();
