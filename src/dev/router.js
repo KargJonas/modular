@@ -20,7 +20,7 @@ const router = {
     return path;
   },
 
-  // Updating the page-content according to the routes-object
+  // Updating content according to the routes-object
   routeChange() {
 
     // Validating the routes object
@@ -30,10 +30,12 @@ const router = {
     const route = router.getRoute( window.location.pathname );
     const entries = Object.entries( router.routes );
 
+    // Looping through all routes in the routes-object
     for ( let i = 0; i < entries.length; i++ ) {
       const entryRoute = router.getRoute( entries[i][0] );
       let match = true;
 
+      // Checking if the current URL matches the route
       for ( let a = 0; a < entryRoute.length; a++ ) {
         if ( route[a] === undefined || ( entryRoute[a] !== "**" && entryRoute[i] !== route[i] ) ) {
           match = false;
@@ -41,6 +43,7 @@ const router = {
         }
       }
 
+      // Change content if match was found
       if ( match ) {
         router.page = entries[i][1];
         window.dispatchEvent( router.newRouteEvent );

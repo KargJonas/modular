@@ -10,11 +10,11 @@ function el() {
     tag = args[0].toLowerCase(),
     attributes = args[1] || {};
 
-  // Remove everyting unnecessary from the arguments array
+  // Remove everything unnecessary from the arguments array
   args.splice( 0, 2 );
   if ( args.length === 1 ) args = args[0];
 
-  // Checking if all mandatory tags are availabile
+  // Checking if all mandatory tags are available
   if ( typeof tag !== "string" ) throw new Error( err( 5 ) );
   if ( attributes.__config__ !== undefined ) throw Error( err( 1 ) );
 
@@ -92,7 +92,7 @@ function el() {
         }
 
         // Adding a reference of the current element to the binding
-        // so that we can update it's propertys when a change occurs.
+        // so that we can update it's properties when a change occurs.
         data.bindings[entry[1]].elements.push( {
 
           // The element

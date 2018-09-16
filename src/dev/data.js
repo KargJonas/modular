@@ -11,7 +11,7 @@ const data = {
   // The error object containing all errors
   errors: errors,
 
-  // A variable to temporarly store style
+  // A variable to temporarily store style
   // so multiple functions can access it
   tempStyle: "",
 

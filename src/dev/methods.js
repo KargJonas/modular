@@ -1,5 +1,10 @@
 import { data } from "./data";
-import { err, getAttr, getHtml } from "./core";
+
+import {
+  err,
+  getAttr,
+  getHtml
+} from "./core";
 
 // Set the value of a binding
 function setBinding( binding, value ) {
@@ -38,9 +43,11 @@ function scan( val ) {
     throw new Error( err( 4 ) );
   }
 
+  // Creating a wrapper
   let wrapper = document.createElement( "div" );
   wrapper.innerHTML = val.trim();
 
+  // Mapping all nodes in the wrapper
   const res = Array.from( wrapper.childNodes ).map( node => {
     if ( node instanceof Element ) {
       return el( node.tagName, getAttr( node.attributes ), scan( node.innerHTML ) );
@@ -81,7 +88,7 @@ function render( element, _container ) {
   styleEl.innerHTML = data.tempStyle;
   document.head.appendChild( styleEl );
 
-  // DIspatching the postrender event
+  // Dispatching the postrender event
   window.dispatchEvent( data.postRender );
 }
 

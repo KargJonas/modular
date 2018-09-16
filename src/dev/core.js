@@ -62,7 +62,7 @@ function getHtml( value ) {
     return el;
   }
 
-  // Create a textnode if content is string
+  // Create a text-node if content is string
   if ( value.constructor === String || value.constructor === Number ) {
     return document.createTextNode( value );
   }
@@ -86,7 +86,7 @@ function makeStyle( obj, id ) {
     pseudos = [];
 
   declarations.map( declaration => {
-    // If a css-decalaration starts with a colon, create a pseudo class
+    // If a css-declaration starts with a colon, create a pseudo class
     if ( declaration[0][1] === ":" && id !== undefined ) {
       pseudos.push( `[data-modular-id="${ id }"]${ declaration[0] }{${ makeStyle( declaration[1] ) }}` );
 
@@ -161,8 +161,8 @@ function makeEl( tagName, attributes, content ) {
 
   // Setting element-attributes
   Object.entries( attributes ).map( attribute => {
-    element.setAttribute(attribute[0], attribute[1]);
-  });
+    element.setAttribute( attribute[0], attribute[1] );
+  } );
 
   // Set the element's content, if provided
   if ( content ) {

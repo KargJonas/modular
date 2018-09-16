@@ -1,5 +1,4 @@
 ## Modular is a tool for dynamic, component-based page-generation.<br>
-### <b>"A little (more than a) templating system."</b>
 
 ## Some neat stuff:
 - Friendly [errors](#errors) 🚨
@@ -61,7 +60,7 @@ There are some events that might come in handy. (All events are bound to the `wi
 | ------------ | ------------------------------------------- |
 | `prerender`  | Dispatched before render                    |
 | `postrender` | Dispatched after render                     |
-| `newroute`   | Dispatched after a route-change has occured |
+| `newroute`   | Dispatched after a route-change has ocurred |
 <hr>
 
 # Modular.el:
@@ -69,16 +68,16 @@ Returns ac object, that can be transformed into a DOM-element with `Modular.rend
 
 ### Usage:
 ```js
-Modular.el(TAGNAME, ATTRIBUTES, CONTENT, CONTENT, ...);
+Modular.el(TAG_NAME, ATTRIBUTES, CONTENT, CONTENT, ...);
 ```
 
-- <b>TAGNAME</b> <i>(String)</i>:<br>The element's `tagName`.<br>( e.g.: `h1`, `div`, `p`, `mycustomtagname`, ... ).
+- <b>TAG_NAME</b> <i>(String)</i>:<br>The element's `tagName`.<br>( e.g.: `h1`, `div`, `p`, `mycustomtagname`, ... ).
 
 - <b>ATTRIBUTES</b> <i>(Object | Null)</i>:<br>The attributes of the element. <br>There are some special attributes such as [style](#Style), [$bind](#Bindings) and [\_\_config\_\_](#__config__).
 
-- <b>CONTENT</b> <i>[ String | Number | Array | Object (Modlar-element) | Function | Element (html) | Null ]</i>:<br>The content of the element. You can use basically anything as content.
+- <b>CONTENT</b> <i>[ String | Number | Array | Object (Modular-element) | Function | Element (html) | Null ]</i>:<br>The content of the element. You can use basically anything as content.
 
-#### Only TAGNAME is required.
+#### Only TAG_NAME is required.
 
 ### Example:
 ![El-Example](https://github.com/KargJonas/random/blob/master/modular/el.gif)
@@ -91,7 +90,7 @@ Converts a value into a DOM-Element and inserts it into another element.
 ```js
 Modular.render(VALUE, ELEMENT_OR_SELECTOR);
 ```
-- VALUE <i>[ String | Number | Array | Object (Modlar-element) | Function | Element (html) | Null ]</i>:<br>The element that will be rendered
+- VALUE <i>[ String | Number | Array | Object (Modular-element) | Function | Element (html) | Null ]</i>:<br>The element that will be rendered
 - ELEMENT_OR_SELECTOR <i>(Element | String)</i>: The parent element or it's selector.
 
 ### Example:
@@ -99,7 +98,7 @@ Modular.render(VALUE, ELEMENT_OR_SELECTOR);
 <hr>
 
 # className
-Because of the way Modular handles elements attibutes it is necessary to use `className` instead of `class` in [Modular.el()](#modularel).
+Because of the way Modular handles elements attributes it is necessary to use `className` instead of `class` in [Modular.el()](#modularel).
 
 ### Example
 ```js
@@ -118,11 +117,11 @@ Modular has some stuff to offer that might help you with dynamic style:
 - If you want, you can use style-objects. Style objects will be transformed into global style, when the element is rendered.
 
 - These style-objects can either contain style, specifically for the current element or entire css rules, which style any of the element's children.
-  
+
 - You can use functions as style. This might seem silly but it makes your code more readable and evaluates the returned object every time the element is rendered.<br><i>Remember: Style functions must return either a String or an Object.</i>
 
 ### Note
-If the provided style is of type string, inline-stlye is expexted. The style will be scoped to the the element itself:
+If the provided style is of type string, inline-style is expected. The style will be scoped to the the element itself:
 
 ```js
 const myStringStyle = "color: red; font-family: monospace;";
@@ -158,7 +157,7 @@ const styleThree = {
 # Bindings
 Bindings are a way to "tie" an element's properties to a value. You could even tie an element's properties to the ones of another element.
 
-To define a Modular-element's bindings, you can use the `$bind`-attribute. The attribute's value must be an object. Each key in the object correnponds to a property of the DOM-element, that is created from Modular.el() and each value is the name of a binding the property will be bound to. (<b>The $bind-attribute will be removed upon render, so your DOM-elements stay nice and clean.</b>)
+To define a Modular-element's bindings, you can use the `$bind`-attribute. The attribute's value must be an object. Each key in the object corresponds to a property of the DOM-element, that is created from Modular.el() and each value is the name of a binding the property will be bound to. (<b>The $bind-attribute will be removed upon render, so your DOM-elements stay nice and clean.</b>)
 
 If any changes occur in either in the binding or any of the elements, all elements that are bound to the binding are updated (<b>But not re-rendered!</b>).
 
@@ -218,7 +217,7 @@ Modular.listenBinding("myOtherBinding", (newValue, event) => {
 <hr>
 
 # Modular.scan
-Converts an html-string into an array of Modular-elements. (<b>Comments are handeled as text.</b>)
+Converts an html-string into an array of Modular-elements. (<b>Comments are handled as text.</b>)
 
 ### Example
 ```js
@@ -279,7 +278,7 @@ Modular.render(
 );
 ```
 
-![Coponents-and-Arrays-Example](https://github.com/KargJonas/random/blob/master/modular/components-and-arrays.gif)
+![Components-and-Arrays-Example](https://github.com/KargJonas/random/blob/master/modular/components-and-arrays.gif)
 <hr>
 
 # The router
@@ -305,7 +304,7 @@ Modular.router.routes = {
 The routes are checked one after the other. When a perfect match to `window.location.pathname` is found, `Modular.router.element` is set to the corresponding element and the `newroute`-event is dispatched (See: [Events](#events)). (Router-Elements could be anything. It's up to you what you want to do with them. See [Modular.render](#modularrender)). `**` matches anything.
 
 ### 2.) Respond to route-changes
-Inorder to change the content on the page, you need to set up a system, that renders the desired content, when a change in the route occurs.
+In order to change the content on the page, you need to set up a system, that renders the desired content, when a change in the route occurs.
 #### Example.
 ```js
 window.addEventListener("newroute", () => {
@@ -331,10 +330,10 @@ window.addEventListener("newroute", () => {
 ```
 
 ### 3.) Server
-If you use the router to build a singlepage-app, you have to tell the server to ignore all request for subpages and only respons with your main file. (`index.html`)
+If you use the router to build a single-page-app, you have to configure the server in a way to ignore all requests for sub-pages and only respond with your main (html) file and the resources required.
 
 #### Apache:
-If you are using Apache, you can just create a file inside your website's folder called "`.htaccess`" containig the following code.
+If you are using Apache, you can just create a file inside your website's folder called "`.htaccess`" containing the following code.
 
 ```apache
 <IfModule mod_rewrite.c>
