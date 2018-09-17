@@ -41,6 +41,12 @@ const Modular = {
   router: router
 };
 
+if ( Modular.data.errors ) {
+  console.warn( Modular.core.err( 0 ) );
+}
+
+document.head.appendChild( Modular.data.styleElement );
+
 // Making Modular a global constant (webpack)
 Object.defineProperty( window, "Modular", {
   value: Modular,
@@ -48,6 +54,3 @@ Object.defineProperty( window, "Modular", {
   enumerable: true,
   configurable: false
 } );
-
-// Development-build warning
-if ( Modular.data.errors ) console.warn( Modular.core.err( 0 ) );

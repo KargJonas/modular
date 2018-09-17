@@ -57,7 +57,7 @@ function scan( val ) {
   return res;
 }
 
-// The entry-point for rendering stuff
+// The method for rendering stuff
 function render( element, _container ) {
   // Resetting temporary values
   data.tempStyle = "";
@@ -84,9 +84,9 @@ function render( element, _container ) {
   container.appendChild( getHtml( element ) );
 
   // Adding the style
-  const styleEl = document.createElement( "style" );
-  styleEl.innerHTML = data.tempStyle;
-  document.head.appendChild( styleEl );
+  // data.styleElement.remove();
+  data.styleElement.innerHTML = data.tempStyle;
+  // document.head.appendChild( styleEl );
 
   // Dispatching the postrender event
   window.dispatchEvent( data.postRender );

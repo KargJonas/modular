@@ -79,6 +79,25 @@ function getHtml( value ) {
   throw err( 3 );
 }
 
+function camelToKebab( input ) {
+  let out = "";
+
+  for ( let i = 0; i < input.length; i++ ) {
+    if ( i > 1 && isUpper( input[i] ) && /[a-zA-Z]/.test(input[i]) ) {
+      out += "-";
+      out += input[i].toLowerCase();
+    } else {
+      out += input[i];
+    }
+  }
+
+  return out;
+}
+
+function isUpper( input ) {
+  return ( input == input.toUpperCase() );
+}
+
 // Transforms a style object into style that only applies to a single element
 function makeStyle( obj, id ) {
   let style = "";
@@ -86,12 +105,21 @@ function makeStyle( obj, id ) {
     pseudos = [];
 
   declarations.map( declaration => {
-    // If a css-declaration starts with a colon, create a pseudo class
-    if ( declaration[0][1] === ":" && id !== undefined ) {
-      pseudos.push( `[data-modular-id="${ id }"]${ declaration[0] }{${ makeStyle( declaration[1] ) }}` );
+    const key = declaration[0];
+    const value = declaration[1];
 
+    // If a css-declaration starts with a colon, create a pseudo class
+    if ( key[0] === ":" && id !== undefined ) {
+      let pseudoStyle;
+      if ( value.constructor === String ) {
+        pseudoStyle = value;
+      } else {
+        pseudoStyle = makeStyle(value);
+      }
+
+      pseudos.push( `[data-modular-id="${ id }"]${ key }{${pseudoStyle} }}` );
     } else {
-      style += `${ declaration[0] }:${ declaration[1] };`;
+      style += `${ camelToKebab(declaration[0]) }:${ value };`;
     }
   } );
 
