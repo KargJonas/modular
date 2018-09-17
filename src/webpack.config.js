@@ -1,4 +1,6 @@
 const path = require( "path" );
+const package = require( "./../dist/package.json" );
+const webpack = require( 'requireg' )( 'webpack' );
 
 module.exports = {
   // mode: "development",
@@ -10,5 +12,8 @@ module.exports = {
   },
   watchOptions: {
     poll: true
-  }
+  },
+  plugins: [
+    new webpack.BannerPlugin(`Modular V${package.version} by Jonas Karg 2018`)
+  ]
 };
