@@ -117,7 +117,7 @@ function makeStyle( obj, id ) {
         pseudoStyle = makeStyle(value);
       }
 
-      pseudos.push( `[data-modular-id="${ id }"]${ key }{${pseudoStyle} }}` );
+      pseudos.push( `[data-modular-id="${ id }"]${ key }{${pseudoStyle} }` );
     } else {
       style += `${ camelToKebab(declaration[0]) }:${ value };`;
     }
@@ -191,6 +191,8 @@ function makeEl( tagName, attributes, content ) {
   Object.entries( attributes ).map( attribute => {
     element.setAttribute( attribute[0], attribute[1] );
   } );
+
+  Object.assign(element, attributes);
 
   // Set the element's content, if provided
   if ( content ) {
