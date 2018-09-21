@@ -83,7 +83,7 @@ function camelToKebab( input ) {
   let out = "";
 
   for ( let i = 0; i < input.length; i++ ) {
-    if ( i > 1 && isUpper( input[i] ) && /[a-zA-Z]/.test(input[i]) ) {
+    if ( i > 1 && isUpper( input[i] ) && /[a-zA-Z]/.test( input[i] ) ) {
       out += "-";
       out += input[i].toLowerCase();
     } else {
@@ -114,12 +114,12 @@ function makeStyle( obj, id ) {
       if ( value.constructor === String ) {
         pseudoStyle = value;
       } else {
-        pseudoStyle = makeStyle(value);
+        pseudoStyle = makeStyle( value );
       }
 
-      pseudos.push( `[data-modular-id="${ id }"]${ key }{${pseudoStyle} }` );
+      pseudos.push( `[data-modular-id="${ id }"]${ key }{${ pseudoStyle } }` );
     } else {
-      style += `${ camelToKebab(declaration[0]) }:${ value };`;
+      style += `${ camelToKebab( declaration[0] ) }:${ value };`;
     }
   } );
 
@@ -180,9 +180,12 @@ function makeEl( tagName, attributes, content ) {
 
   // Generate global style if style found
   if ( attributes && attributes.style ) {
-    data.tempElCount++;
-    data.tempStyle += getStyle( attributes.style, data.tempElCount );
-    attributes["data-modular-id"] = data.tempElCount;
+    data.tempElCount[data.tempElCount.length - 1]++;
+    data.tempStyle[data.tempStyle.length - 1] += getStyle(
+      attributes.style,
+      data.tempElCount[data.tempElCount.length - 1]
+    );
+    attributes["data-modular-id"] = data.tempElCount[data.tempElCount.length - 1];
 
     delete attributes.style;
   }
@@ -192,7 +195,7 @@ function makeEl( tagName, attributes, content ) {
     element.setAttribute( attribute[0], attribute[1] );
   } );
 
-  Object.assign(element, attributes);
+  Object.assign( element, attributes );
 
   // Set the element's content, if provided
   if ( content ) {

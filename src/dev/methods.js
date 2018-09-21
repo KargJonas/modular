@@ -60,8 +60,8 @@ function scan( val ) {
 // The method for rendering stuff
 function render( element, _container ) {
   // Resetting temporary values
-  data.tempStyle = "";
-  data.tempElCount = 0;
+  data.tempStyle.push("");
+  data.tempElCount.push(0);
 
   // Dispatching the prerender event
   window.dispatchEvent( data.preRender );
@@ -84,9 +84,9 @@ function render( element, _container ) {
   container.appendChild( getHtml( element ) );
 
   // Adding the style
-  // data.styleElement.remove();
-  data.styleElement.innerHTML = data.tempStyle;
-  // document.head.appendChild( styleEl );
+  data.styleElement.innerHTML = data.tempStyle[data.tempStyle.length - 1];
+  data.tempStyle.pop();
+  data.tempElCount.pop();
 
   // Dispatching the postrender event
   window.dispatchEvent( data.postRender );

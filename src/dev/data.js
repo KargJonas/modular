@@ -13,13 +13,13 @@ const data = {
 
   // A variable to temporarily store style
   // so multiple functions can access it
-  tempStyle: "",
+  tempStyle: [],
 
   // An element that is used to add the style
   styleElement: document.createElement( "style" ),
 
   // A counter used to generate element-IDs
-  tempElCount: 0
+  tempElCount: []
 };
 
 export { data };
