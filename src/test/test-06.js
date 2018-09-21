@@ -1,4 +1,4 @@
-const m = new Modular();
+const m = Modular;
 
 const myEl = m.el(
   "h1",

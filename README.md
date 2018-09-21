@@ -303,8 +303,8 @@ Modular.router.routes = {
 
 The routes are checked one after the other. When a perfect match to `window.location.pathname` is found, `Modular.router.element` is set to the corresponding element and the `newroute`-event is dispatched (See: [Events](#events)). (Router-Elements could be anything. It's up to you what you want to do with them. See [Modular.render](#modularrender)). `**` matches anything.
 
-### 2.) Respond to route-changes
-In order to change the content on the page, you need to set up a system, that renders the desired content, when a change in the route occurs.
+### 2.) Respond to route-changes & initialize
+In order to change the content on the page, you need to set up a system, that renders the desired content, when a change in the route occurs. To start the router, `Modular.router.init()` must be called.
 #### Example.
 ```js
 window.addEventListener("newroute", () => {
@@ -313,6 +313,9 @@ window.addEventListener("newroute", () => {
         "#root"
     );
 });
+
+// Initialize the router
+Modular.router.init();
 ```
 
 #### Note
