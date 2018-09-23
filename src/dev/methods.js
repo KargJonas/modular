@@ -1,4 +1,5 @@
 import { data } from "./data";
+import el from "./el";
 
 import {
   err,
@@ -60,8 +61,8 @@ function scan( val ) {
 // The method for rendering stuff
 function render( element, _container ) {
   // Resetting temporary values
-  data.tempStyle.push("");
-  data.tempElCount.push(0);
+  data.tempStyle.push( "" );
+  data.tempElCount.push( 0 );
 
   // Dispatching the prerender event
   window.dispatchEvent( data.preRender );
