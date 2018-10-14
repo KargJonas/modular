@@ -1,6 +1,6 @@
 const path = require( "path" );
 const package = require( "./../dist/package.json" );
-const webpack = require( 'requireg' )( 'webpack' );
+const webpack = require( "requireg" )( "webpack" );
 
 module.exports = {
   // mode: "development",

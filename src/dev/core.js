@@ -156,7 +156,7 @@ function getStyle( val, id ) {
       style = "";
 
       rules.map( rule => {
-        style += `[data-modular-id="${ id }"]>${ rule[0] }{${ makeStyle( rule[1] ) }}`;
+        style += `[data-modular-id="${ id }"] ${ rule[0] }{${ makeStyle( rule[1] ) }}`;
       } );
 
     } else {
