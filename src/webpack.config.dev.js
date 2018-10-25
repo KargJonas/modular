@@ -18,11 +18,11 @@ module.exports = {
   mode: mode,
   watchOptions: { poll: true },
   plugins: [banner],
-  entry: path.resolve(__dirname, "dev/modular.js"),
+  entry: path.resolve(__dirname, "dev/modular.dev.js"),
 
   output: {
     library: "Modular",
     path: path.resolve(__dirname, "../dist"),
-    filename: "modular.js"
+    filename: "modular.dev.js"
   }
 }

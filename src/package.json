@@ -6,7 +6,7 @@
     "scripts": {
         "config": "webpack --config webpack.config.js",
         "start-dev": "webpack --watch",
-        "build": "webpack dev/modular.js"
+        "build": "webpack --config webpack.config.js && webpack --config webpack.config.dev.js"
     },
     "author": "Jonas Karg",
     "license": "MIT",
