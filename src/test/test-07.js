@@ -6,4 +6,4 @@ const myEl = m.el(
   "Test"
 );
 
-m.render( myEl, "#root" );
+m.render(myEl, "#root");

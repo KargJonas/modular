@@ -41,6 +41,10 @@ If you are using modular on a regular website, you can just include it with a `<
 npm i modular-ui
 ```
 
+```js
+import Modular from "modular-ui";
+```
+
 ### RawGit links:
 https://rawgit.com/KargJonas/modular/master/dist/modular.dev.js<br>
 https://rawgit.com/KargJonas/modular/master/dist/modular.js

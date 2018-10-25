@@ -1,6 +1,11 @@
-const data = require("./data");
-const el = require("./el");
-const core = require("./core");
+import { data } from "./data";
+import el from "./el";
+
+import {
+  err,
+  getAttr,
+  getHtml
+} from "./core";
 
 // Set the value of a binding
 function setBinding( binding, value ) {
@@ -36,7 +41,7 @@ function listenBinding( binding, func ) {
 function scan( val ) {
   // Validating input
   if ( val.constructor !== String ) {
-    throw new Error( core.err( 4 ) );
+    throw new Error( err( 4 ) );
   }
 
   // Creating a wrapper
@@ -46,7 +51,7 @@ function scan( val ) {
   // Mapping all nodes in the wrapper
   const res = Array.from( wrapper.childNodes ).map( node => {
     if ( node instanceof Element ) {
-      return el( node.tagName, core.getAttr( node.attributes ), scan( node.innerHTML ) );
+      return el( node.tagName, getAttr( node.attributes ), scan( node.innerHTML ) );
     } else return node.textContent;
   } );
 
@@ -62,7 +67,7 @@ function render( element, _container ) {
   // Dispatching the prerender event
   window.dispatchEvent( data.preRender );
 
-  if ( !element || !_container ) throw new Error( core.err( 7 ) );
+  if ( !element || !_container ) throw new Error( err( 7 ) );
   let container;
 
   // Handling container selector-string
@@ -72,12 +77,12 @@ function render( element, _container ) {
 
   // Validating container
   if ( !( container instanceof Element ) ) {
-    throw core.err( 8 );
+    throw err( 8 );
   }
 
   // Adding the rendered content
   container.innerHTML = "";
-  container.appendChild( core.getHtml( element ) );
+  container.appendChild( getHtml( element ) );
 
   // Adding the style
   if (!document.querySelector("style[type='-modular-style-']")) {
@@ -92,10 +97,10 @@ function render( element, _container ) {
   window.dispatchEvent( data.postRender );
 }
 
-module.exports = {
-  getBinding: getBinding,
-  setBinding: setBinding,
-  listenBinding: listenBinding,
-  scan: scan,
-  render: render
+export {
+  getBinding,
+  setBinding,
+  listenBinding,
+  scan,
+  render
 };

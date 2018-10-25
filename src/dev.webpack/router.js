@@ -1,4 +1,4 @@
-const err = require("./core").err;
+import { err } from "./core";
 
 const router = {
   // Event for route changes

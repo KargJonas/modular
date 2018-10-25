@@ -1,44 +1,44 @@
 // Router link
 function rl(path, text, style) {
-    return Modular.el(
-        "a",
-        {
-            href: "#",
-            style: style,
-            onclick() {
-                Modular.router.navigate(path);
-            }
-        },
-        text
-    );
+  return Modular.el(
+    "a",
+    {
+      href: "#",
+      style: style,
+      onclick() {
+        Modular.router.navigate(path);
+      }
+    },
+    text
+  );
 }
 
 function NotFound() {
-    return Modular.el("div", {
-        style: {
-            position: "absolute",
-            fontSize: "50px",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            textAlign: "center"
-        }
-    },
-        Modular.el("h1", {
-            style: {
-                fontSize: "150px",
-                margin: 0,
-                padding: 0
-            }
-        }, 404),
+  return Modular.el("div", {
+    style: {
+      position: "absolute",
+      fontSize: "50px",
+      left: "50%",
+      top: "50%",
+      transform: "translate(-50%, -50%)",
+      textAlign: "center"
+    }
+  },
+    Modular.el("h1", {
+      style: {
+        fontSize: "150px",
+        margin: 0,
+        padding: 0
+      }
+    }, 404),
 
-        Modular.el("h2", {
-            style: {
-                margin: 0,
-                padding: 0
-            }
-        }, "Page not found")
-    );
+    Modular.el("h2", {
+      style: {
+        margin: 0,
+        padding: 0
+      }
+    }, "Page not found")
+  );
 }
 
 const mainPage = Modular.scan(`
@@ -51,20 +51,20 @@ const mainPage = Modular.scan(`
 `);
 
 Modular.router.routes = {
-    "/src/build/index.html": mainPage,
-    "/src/build": mainPage,
-    "**": NotFound
+  "/src/build/index.html": mainPage,
+  "/src/build": mainPage,
+  "**": NotFound
 };
 
 window.addEventListener("newroute", () => {
-    Modular.render(
-        [Modular.router.page, rl("/src/build/test", "this is a test-link")],
-        "#root"
-    );
+  Modular.render(
+    [Modular.router.page, rl("/src/build/test", "this is a test-link")],
+    "#root"
+  );
 });
 
 Modular.router.init();
 
 document.addEventListener("click", () => {
-    Modular.router.navigate("/test");
+  Modular.router.navigate("/test");
 });

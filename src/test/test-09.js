@@ -1,14 +1,14 @@
 let frame = 0;
 
-function getColor( input, magnitude ) {
+function getColor(input, magnitude) {
   return {
-    r: Math.abs( Math.sin( input ) * magnitude ),
-    g: Math.abs( Math.sin( input + 45 ) * magnitude ),
-    b: Math.abs( Math.sin( input + 90 ) * magnitude )
+    r: Math.abs(Math.sin(input) * magnitude),
+    g: Math.abs(Math.sin(input + 45) * magnitude),
+    b: Math.abs(Math.sin(input + 90) * magnitude)
   };
 }
 
-function Counter( num, color ) {
+function Counter(num, color) {
   return Modular.el(
     "h1",
     {
@@ -25,9 +25,9 @@ function Counter( num, color ) {
 }
 
 async function anim() {
-  window.requestAnimationFrame( anim );
+  window.requestAnimationFrame(anim);
   frame++;
-  Modular.render( Counter( frame, getColor( frame / 100, 255 ) ), "#root" );
+  Modular.render(Counter(frame, getColor(frame / 100, 255)), "#root");
 }
 
 anim();

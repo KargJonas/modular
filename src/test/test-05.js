@@ -4,4 +4,4 @@ const myEl = Modular.el(
   "Test"
 );
 
-Modular.render( myEl, "#root" );
+Modular.render(myEl, "#root");

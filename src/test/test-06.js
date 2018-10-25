@@ -17,13 +17,13 @@ m.router.routes = {
   "/src/test/index.html": myEl2
 };
 
-window.addEventListener( "click", () => m.router.navigate( "/test" ) );
+window.addEventListener("click", () => m.router.navigate("/test"));
 
-window.addEventListener( "newroute", () => {
+window.addEventListener("newroute", () => {
   m.render(
     m.router.page,
     "#root"
   );
-} );
+});
 
 m.router.init();

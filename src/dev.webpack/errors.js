@@ -64,4 +64,4 @@ const errors = {
 
 console.warn("🚨 (Modular): [Info]\n\n--> You are using the development build of Modular. Make sure to use the production build when deploying this app.");
 
-module.exports = errors;
+export default errors;

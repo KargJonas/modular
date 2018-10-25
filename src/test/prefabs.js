@@ -1,4 +1,4 @@
-function Button( text, func, _size ) {
+function Button(text, func, _size) {
   const size = _size || 1;
 
   return Modular.el(

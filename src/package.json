@@ -18,11 +18,11 @@
         "url": "https://github.com/KargJonas/modular/issues"
     },
     "homepage": "https://github.com/KargJonas/modular#readme",
-    "devDependencies": {},
-    "dependencies": {
+    "devDependencies": {
+        "requireg": "^0.2.1",
         "babel-core": "^6.26.3",
         "babel-loader": "^7.1.5",
-        "babel-preset-env": "^1.7.0",
-        "requireg": "^0.2.1"
-    }
+        "babel-preset-env": "^1.7.0"
+    },
+    "dependencies": {}
 }
