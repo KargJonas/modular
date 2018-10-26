@@ -3,6 +3,7 @@ const methods = require("./methods");
 const data = require("./data");
 const el = require("./el");
 const router = require("./router");
+const scan = require("./scan");
 
 const Modular = {
   // Events, bindings and error-messages
@@ -15,9 +16,9 @@ const Modular = {
   getBinding: methods.getBinding,
   setBinding: methods.setBinding,
   listenBinding: methods.listenBinding,
-  scan: methods.scan,
   render: methods.render,
   el: el,
+  scan: scan,
   router: router
 };
 

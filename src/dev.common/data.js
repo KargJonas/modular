@@ -1,6 +1,4 @@
-import errors from "./errors";
-
-// document.head.appendChild(Modular.data.styleElement);
+// const errors = require("./errors.js");
 
 const styleElement = document.createElement("style");
 styleElement.setAttribute("type", "-modular-style-");
@@ -27,4 +25,4 @@ const data = {
   tempElCount: []
 };
 
-export { data };
+module.exports = data;

@@ -1,4 +1,6 @@
-// const errors = require("./errors.js");
+import { errors } from "./errors";
+
+// document.head.appendChild(Modular.data.styleElement);
 
 const styleElement = document.createElement("style");
 styleElement.setAttribute("type", "-modular-style-");
@@ -8,11 +10,11 @@ const data = {
   bindings: {},
 
   // The render events
-  preRender: new Event( "prerender" ),
-  postRender: new Event( "postrender" ),
+  preRender: new Event("prerender"),
+  postRender: new Event("postrender"),
 
   // The error object containing all errors
-  // errors: errors,
+  errors: errors,
 
   // A variable to temporarily store style
   // so multiple functions can access it
@@ -25,4 +27,4 @@ const data = {
   tempElCount: []
 };
 
-module.exports = data;
+export { data };

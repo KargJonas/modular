@@ -1,4 +1,4 @@
-import { data } from "./data";
+const data = require("./data");
 
 // Creates an error-string with modular-format
 function err( i ) {
@@ -205,10 +205,10 @@ function makeEl( tagName, attributes, content ) {
   return element;
 }
 
-export {
-  err,
-  getAttr,
-  getHtml,
-  getStyle,
-  makeEl
+module.exports = {
+  err: err,
+  getAttr: getAttr,
+  getHtml: getHtml,
+  getStyle: getStyle,
+  makeEl: makeEl
 };

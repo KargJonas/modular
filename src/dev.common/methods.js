@@ -1,11 +1,5 @@
-import { data } from "./data";
-import el from "./el";
-
-import {
-  err,
-  getAttr,
-  getHtml
-} from "./core";
+const data = require("./data");
+const core = require("./core");
 
 // Set the value of a binding
 function setBinding( binding, value ) {
@@ -37,27 +31,6 @@ function listenBinding( binding, func ) {
   data.bindings[binding].listeners.push( func );
 }
 
-// Converts a (html) string into a Modular-element
-function scan( val ) {
-  // Validating input
-  if ( val.constructor !== String ) {
-    throw new Error( err( 4 ) );
-  }
-
-  // Creating a wrapper
-  let wrapper = document.createElement( "div" );
-  wrapper.innerHTML = val.trim();
-
-  // Mapping all nodes in the wrapper
-  const res = Array.from( wrapper.childNodes ).map( node => {
-    if ( node instanceof Element ) {
-      return el( node.tagName, getAttr( node.attributes ), scan( node.innerHTML ) );
-    } else return node.textContent;
-  } );
-
-  return res;
-}
-
 // The method for rendering stuff
 function render( element, _container ) {
   // Resetting temporary values
@@ -67,7 +40,7 @@ function render( element, _container ) {
   // Dispatching the prerender event
   window.dispatchEvent( data.preRender );
 
-  if ( !element || !_container ) throw new Error( err( 7 ) );
+  if ( !element || !_container ) throw new Error( core.err( 7 ) );
   let container;
 
   // Handling container selector-string
@@ -77,12 +50,12 @@ function render( element, _container ) {
 
   // Validating container
   if ( !( container instanceof Element ) ) {
-    throw err( 8 );
+    throw core.err( 8 );
   }
 
   // Adding the rendered content
   container.innerHTML = "";
-  container.appendChild( getHtml( element ) );
+  container.appendChild( core.getHtml( element ) );
 
   // Adding the style
   if (!document.querySelector("style[type='-modular-style-']")) {
@@ -97,10 +70,9 @@ function render( element, _container ) {
   window.dispatchEvent( data.postRender );
 }
 
-export {
-  getBinding,
-  setBinding,
-  listenBinding,
-  scan,
-  render
+module.exports = {
+  getBinding: getBinding,
+  setBinding: setBinding,
+  listenBinding: listenBinding,
+  render: render
 };

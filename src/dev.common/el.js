@@ -1,10 +1,16 @@
-import { data } from "./data";
-import { err, makeEl, getHtml } from "./core";
-import { setBinding, getBinding } from "./methods";
+const data = require("./data");
+const core = require("./core");
+const methods = require("./methods");
+
+const err = core.err;
+const makeEl = core.makeEl;
+const getHtml = core.getHtml;
+
+const setBinding = methods.setBinding;
+const getBinding = methods.getBinding;
 
 // Creates a modular-element
 function el() {
-
   // Extracting tag and attributes from the arguments
   let args = Array.from( arguments ),
     tag = args[0].toLowerCase(),
@@ -122,4 +128,4 @@ function el() {
   return attributes;
 }
 
-export default el;
+module.exports = el;
