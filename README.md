@@ -4,7 +4,7 @@
 
 ## Some neat stuff:
 - Friendly [errors](#errors) 🚨
-- Fast [rendering](#modular.render) ⏱️
+- Fast [rendering](#modularrender) ⏱️
 - [Data-binding](#bindings) ⛓
 - Intuitive [syntax](#example) 👩🏻‍💻
 - A solid [router](#the-router) 📡
@@ -104,7 +104,7 @@ Modular.render(VALUE, ELEMENT_OR_SELECTOR);
 <hr>
 
 # className
-Because of the way Modular handles elements attributes it is necessary to use `className` instead of `class` in [Modular.el()](#modularel).
+Because of the way Modular handles element-attributes it is necessary to use `className` instead of `class` in [Modular.el()](#modularel).
 
 ### Example
 ```js

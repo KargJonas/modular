@@ -4,7 +4,7 @@
 
 ## Some neat stuff:
 - Friendly [errors](https://github.com/KargJonas/modular#errors) 🚨
-- Fast [rendering](https://github.com/KargJonas/modular#Modular.render) ⏱️
+- Fast [rendering](https://github.com/KargJonas/modular#Modularrender) ⏱️
 - [Data-binding](https://github.com/KargJonas/modular#bindings) ⛓
 - Intuitive [syntax](https://github.com/KargJonas/modular#example) 👩🏻‍💻
 - A solid [router](https://github.com/KargJonas/modular#the-router) 📡
