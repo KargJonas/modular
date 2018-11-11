@@ -62,6 +62,6 @@ const errors = {
     "router.routeChange"]
 }
 
-console.warn("🚨 (Modular): [Info]\n\n--> You are using the development build of Modular. Make sure to use the production build when deploying this app.");
+// console.warn("🚨 (Modular): [Info]\n\n--> You are using the development build of Modular. Make sure to use the production build when deploying this app.");
 
 export { errors };

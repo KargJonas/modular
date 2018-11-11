@@ -17,7 +17,7 @@ const Modular = {
   listenBinding: methods.listenBinding,
   scan: methods.scan,
   render: methods.render,
-  el: el,
+  el: el.el,
   router: router
 };
 

@@ -629,3 +629,4 @@ var Modular = (function () {
   return modular;
 
 }());
+module.exports = Modular;

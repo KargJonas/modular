@@ -1,8 +1,8 @@
 {
   "name": "modular-ui",
-  "version": "2.8.10",
+  "version": "2.9.3",
   "description": "A tool for dynamic, component-based page-generation.",
-  "main": "modular.dev.js",
+  "main": "modular.es.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

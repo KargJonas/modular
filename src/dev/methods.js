@@ -85,7 +85,7 @@ function render(element, _container) {
   container.appendChild(getHtml(element));
 
   // Adding the style
-  if (!document.querySelector("style[type='-modular-style-']")) {
+  if (!document.querySelector("style[modular-style]")) {
     document.head.appendChild(data.styleElement);
   }
 

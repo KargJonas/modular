@@ -49,7 +49,7 @@ function getHtml( value ) {
     return getHtml( value() );
   }
 
-  if ( value instanceof Array ) {
+  if (value instanceof Array) {
     // Return empty element if array is empty
     if ( !value.length ) {
       return getHtml();

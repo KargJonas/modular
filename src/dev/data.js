@@ -3,7 +3,7 @@ import { errors } from "./errors";
 // document.head.appendChild(Modular.data.styleElement);
 
 const styleElement = document.createElement("style");
-styleElement.setAttribute("type", "-modular-style-");
+styleElement.setAttribute("modular-style", "");
 
 const data = {
   // All bindings (their names) and the associated elements
