@@ -300,7 +300,7 @@ var Modular = (function () {
     Object.assign( element, attributes );
 
     // Set the element's content, if provided
-    if ( content ) {
+    if ( content !== undefined && content !== null ) {
       element.appendChild( content );
     }
 
