@@ -47,9 +47,8 @@ npm i modular-ui
 import Modular from "modular-ui";
 ```
 
-### RawGit links:
-https://rawgit.com/KargJonas/modular/master/dist/modular.dev.js<br>
-https://rawgit.com/KargJonas/modular/master/dist/modular.js
+### CDN link:
+https://cdn.jsdelivr.net/gh/KargJonas/modular/dist/modular.js
 
 <hr>
 
