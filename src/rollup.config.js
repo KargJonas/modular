@@ -1,5 +1,6 @@
 import commonjs from "rollup-plugin-commonjs";
 import nodeResolve from "rollup-plugin-node-resolve";
+import minify from "rollup-plugin-babel-minify";
 
 const banner = `/** @license Modular-UI
 * Copyright (c) ${ (new Date()).getFullYear() } Jonas Karg
@@ -7,6 +8,7 @@ const banner = `/** @license Modular-UI
 * This source code is licensed under the MIT license found in the
 * LICENSE file in the root directory of this source tree.
 */`;
+
 const plugins = [
   nodeResolve({
     jsnext: true,
@@ -52,6 +54,18 @@ export default [
       name: "Modular",
       footer: "export default Modular;",
       banner
+    }
+  },
+  {
+    plugins: [...plugins, minify({
+      comments: false,
+      banner
+    })],
+    input: "dev/modular.js",
+    output: {
+      file: "../dist/modular.min.js",
+      format: "iife",
+      name: "Modular"
     }
   }
 ];
