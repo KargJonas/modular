@@ -1,5 +1,4 @@
-> This library is currently under construction.
-
+#### You should give [modular-browser-jsx](https://github.com/KargJonas/modular-browser-jsx) a try - It allows you to use Modular with JSX directly directly in the browser.
 ## Modular is a tool for dynamic, component-based page-generation.<br>
 
 ## Some neat stuff:
