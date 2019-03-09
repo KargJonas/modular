@@ -67,4 +67,4 @@ const router = {
 };
 
 // Initial route change in main file
-export { router };
+export default router;

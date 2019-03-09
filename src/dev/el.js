@@ -122,4 +122,4 @@ function el() {
   return attributes;
 }
 
-export { el };
+export default el;

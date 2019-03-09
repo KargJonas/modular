@@ -1,5 +1,5 @@
 import { data } from "./data";
-import { el } from "./el";
+import el from "./el";
 
 import {
   err,
